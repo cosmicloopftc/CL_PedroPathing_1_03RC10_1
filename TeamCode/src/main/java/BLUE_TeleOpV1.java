@@ -30,6 +30,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.List;
@@ -620,12 +621,12 @@ public class BLUE_TeleOpV1 extends OpMode {
                     robot.Outtake.openClaw();
                 }
                 if (gamepad2.x){
-                    robot.Outtake.leftSlideSetPositionPower(150,1);
-                    robot.Outtake.rightSlideSetPositionPower(150,1);
+                    robot.Outtake.leftSlideSetPositionPower(1260,1);
+                    robot.Outtake.rightSlideSetPositionPower(1260,1);
                     outtakeOption = "highChamber";
                 }
 
-                if (outtakeOption.equals("highChamber") && robot.Outtake.outtakeLeftSlide.getCurrentPosition()>140){
+                if (outtakeOption.equals("highChamber") && robot.Outtake.outtakeLeftSlide.getCurrentPosition()>100){
                     robot.Outtake.highChamberSetUpwards();
                 }
                 if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 1100 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 1300 && (gamepad2.b || gamepad2.left_bumper)){ // Open claw if specimen scored
@@ -800,6 +801,9 @@ public class BLUE_TeleOpV1 extends OpMode {
         telemetryA.addData("Outtake Arm Position actual reading:",robot.Outtake.getOuttakeArmPosition());
         telemetryA.addData("Outtake Arm set position:", robot.Outtake.outtakeArmAxon.getPosition());
         telemetryA.addData("Outtake claw Position: ", robot.Outtake.claw.getPosition());
+        telemetryA.addLine(" ");
+        telemetryA.addData("Intake slider Current mA = ", robot.Intake.getIntakeSlideCurrent());
+        telemetryA.addData("Intake slider Position: ", robot.Intake.intakeSlides.getCurrentPosition());
         telemetryA.addLine(" ");
         telemetryA.addData("Intake Axon Servo Position actual reading:",robot.Intake.getIntakeServoAxonPosition());
         telemetryA.addData("Intake Axon Servo set position:", robot.Intake.getIntakeServoAxonPosition());

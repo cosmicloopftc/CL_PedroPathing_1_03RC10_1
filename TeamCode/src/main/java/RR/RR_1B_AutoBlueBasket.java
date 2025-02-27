@@ -683,7 +683,7 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
                 timer = new ElapsedTime();
-                NormalizedRGBA colors = robot.Sensor.colorIntake.getNormalizedColors();
+                NormalizedRGBA colors = autoRobot.Sensor.colorIntake.getNormalizedColors();
                 double blue = colors.blue;
                 double red = colors.red;
                 double green = colors.green;

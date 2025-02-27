@@ -95,7 +95,7 @@ public class HardwareOuttake {
     public void groundPosition(){
         leftSlideSetPositionPower(0,1);
         rightSlideSetPositionPower(0,1);
-        outtakeArmAxon.setPosition(0.33);  // by Eduardo 2/17/25 (0.34); //TODO: Find position for transfering (stays the same throughout process)
+        outtakeArmAxon.setPosition(0.34);  // by Eduardo 2/17/25 (0.34); //TODO: Find position for transfering (stays the same throughout process)
         extendIN();
         //openClaw();
     }
@@ -148,7 +148,7 @@ public class HardwareOuttake {
     public void wallIntakeFront(){
         leftSlideSetPositionPower(0,1);
         rightSlideSetPositionPower(0,1);
-        outtakeArmAxon.setPosition(0.28);
+        outtakeArmAxon.setPosition(0.29);
         extendOUT();
     }
 
