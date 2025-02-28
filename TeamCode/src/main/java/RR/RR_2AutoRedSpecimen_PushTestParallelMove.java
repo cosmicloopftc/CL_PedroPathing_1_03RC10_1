@@ -103,9 +103,9 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
         double clawOpen_Pos = 0.0;  // change from Eduardo 2/17  0.7;       //open claw after score
         double clawOpen_pauseTimeSecond = 0.2;
 
-        double wallPickup_OuttakeArmAxonPos = 0.28;         //rotate outtake arm into robot to wall pickup position
+        double wallPickup_OuttakeArmAxonPos = 0.29;         //rotate outtake arm into robot to wall pickup position
         int wallPickup_SliderPos = 0;                       //outtake slider position to pickup specimen from wall
-        double wallPickup_OuttakeExtensionPos =  0.85;      //extend out arm out (need to place this to the place after preloadscore)
+        double wallPickup_OuttakeExtensionPos =  0.82;      //extend out arm out (need to place this to the place after preloadscore)
 
 
         /** START */
@@ -130,11 +130,11 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
                 .setReversed(true)
                 .strafeTo(new Vector2d(44,-7), velFast, accMedium)                          //strafe from midway to Sample4
 
-                .strafeTo(new Vector2d(47, -50), velFast, accFast)      //pushSample4Home
+                .strafeTo(new Vector2d(48, -50), velFast, accFast)      //pushSample4Home
 
                 .setReversed(true)
-                .strafeTo(new Vector2d(54, -8), velFast, accFast)       //toward Sample5
-                .strafeTo(new Vector2d(55, -50), velFast, accMedium)    //pushSample5Home
+                .strafeTo(new Vector2d(55, -8), velFast, accFast)       //toward Sample5
+                .strafeTo(new Vector2d(56, -50), velFast, accMedium)    //pushSample5Home
 
 //                .setReversed(true)
 //                .strafeTo(new Vector2d(62, -8), velFast, accMedium)     //toward Sample6
@@ -346,7 +346,7 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
                                 //autoOuttakeSliderAction(wallPickup_SliderPos, 1),               //=0 outtake slider position to pickup specimen from wall
                                 collectSpec2.build()  //open claw; move back from submersible; delay rotate arm in, extend to wall, lower slider; THEN goto wall
                         ),
-                        autoClawAction(1, clawClose_pauseTimeSecond),                     //close claw
+                        autoClawAction(clawClose_Pos, clawClose_pauseTimeSecond),                     //close claw
                         new ParallelAction(
                                 autoOuttakeSliderAction(scoring_OutakeSlider_ScoringPos, 1),        //move slider up
                                 autoouttakeExtensionAction(scoring_OuttakeExtension_ScoringPos),          //bring arm into robot to scoring position
