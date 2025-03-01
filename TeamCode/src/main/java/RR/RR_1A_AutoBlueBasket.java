@@ -42,9 +42,9 @@ import java.util.List;
 import Hardware.HardwareNoDriveTrainRobot;
 
 @Config
-@Autonomous(name = "RR_1B_AUTO_Red Basket_Submer v1.1", group = "Auto")
+@Autonomous(name = "RR_1B_AUTO_Park Basket_Submer v1.1", group = "Auto")
 
-public class RR_1A_AutoRedBasket extends LinearOpMode {
+public class RR_1A_AutoBlueBasket extends LinearOpMode {
 
     //TODO: setup initial position for all subsystems
     //    public static double autoEnd_SliderMotorPosition,
@@ -110,7 +110,7 @@ public class RR_1A_AutoRedBasket extends LinearOpMode {
                 .waitSeconds(0.1);
 
         TrajectoryActionBuilder grabPose = preScore.endTrajectory().fresh()
-                .strafeToSplineHeading(grabPosePosition1, Math.toRadians(73.5));
+                .strafeToSplineHeading(grabPosePosition1, Math.toRadians(74));
 
         TrajectoryActionBuilder turnToBasket3 = grabPose.endTrajectory().fresh()
                 .waitSeconds(0.6)
@@ -125,10 +125,10 @@ public class RR_1A_AutoRedBasket extends LinearOpMode {
                 .turnTo(Math.toRadians(46));
 
         TrajectoryActionBuilder grabPose3 = turnToBasket3.endTrajectory().fresh()
-                .strafeToSplineHeading(grabPosePosition3, Math.toRadians(135.75));
+                .strafeToSplineHeading(grabPosePosition3, Math.toRadians(136.25));
 //                .strafeToSplineHeading(grabPosePosition, Math.toRadians(124));
         TrajectoryActionBuilder move = grabPose3.endTrajectory().fresh()
-                .strafeToConstantHeading(new Vector2d(-61, -47.5));
+                .strafeToSplineHeading(new Vector2d(-61, -47.5), Math.toRadians(132.75));
 //                .strafeToSplineHeading(grabPosePosition, Math.toRadians(124));
 
         TrajectoryActionBuilder turnToBasket10 = move.endTrajectory().fresh()
@@ -137,12 +137,14 @@ public class RR_1A_AutoRedBasket extends LinearOpMode {
 
         TrajectoryActionBuilder submersible = turnToBasket3.endTrajectory().fresh()
                 .setTangent(45)
-                .splineToSplineHeading(new Pose2d(-24, 0, 0), Math.toRadians(35));
+                .strafeToSplineHeading(new Vector2d(-25, 0), Math.toRadians(180))
+                .strafeToSplineHeading(new Vector2d(-22, 0), Math.toRadians(180));
+
 
         TrajectoryActionBuilder turnToBasket2 = submersible.endTrajectory().fresh()
                 .setTangent(45)
                 .strafeToConstantHeading(new Vector2d(-25, 0))
-                .strafeToSplineHeading(new Vector2d(-59, -52.5), Math.toRadians(45));
+                .strafeToSplineHeading(new Vector2d(-59.5, -53), Math.toRadians(45.5));
 
 
         //*****LOOP wait for start, INIT LOOP***********************************************************
@@ -258,7 +260,7 @@ public class RR_1A_AutoRedBasket extends LinearOpMode {
                                 //move to first sample
                                 grabPose3.build()
                         ),
-                        autoIntakeSliderAction(300, sliderPower-0.05, 0),
+                        autoIntakeSliderAction(255, sliderPower-0.05, 0),
                         autoIntakeServoAxonAction(intakeAxonPosition, 0),
                         move.build(),
                         /*NEXT STEP*/
@@ -284,86 +286,13 @@ public class RR_1A_AutoRedBasket extends LinearOpMode {
                         new ParallelAction(
                                 submersible.build(),
                                 new SequentialAction(
-                                        autoOuttakeArmAxonAction(readyPosition, 0),
-                                        autoouttakeExtensionAction(1, 0),
-                                        autoOuttakeSliderAction(1, 1),
-                                        AutoIntakeSweeperAction(sweeperOUT, 3),
-                                        AutoIntakeSweeperAction(sweeperIn, 0)
-                                )
-                        )
-                )
-        );
-        telemetry.setMsTransmissionInterval(10); // This sets how often we ask Limelight for data (100 times per second)
-        limelight.pipelineSwitch(1);
-        limelight.start();
-        LLResult result = limelight.getLatestResult();
-        int turnAmount = 1;
-        if(result != null) {
-            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-            List<Double> left = new ArrayList<>();
-            List<Double> right = new ArrayList<>();
-            List<Double> center = new ArrayList<>();
-            for (LLResultTypes.ColorResult cr : colorResults) {
-                telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
-                if (cr.getTargetXDegrees() < -5) {
-                    left.add(cr.getTargetXDegrees());
-                } else if (cr.getTargetXDegrees() < 5) {
-                    center.add(cr.getTargetXDegrees());
-                } else {
-                    right.add(cr.getTargetXDegrees());
-                }
-            }
-            telemetry.update();
-            limelight.stop();
-            if (left.size() > right.size() && center.size() < left.size()) {
-                turnAmount = 345;
-            } else if (right.size() > left.size() && center.size() < right.size()) {
-                turnAmount = 15;
-            } else if (center.size() > left.size() && center.size() > right.size()) {
-                turnAmount = 1;
-            }
-        } else {
-            telemetry.addData("Null", "Null");
-        }
-        telemetry.update();
-        TrajectoryActionBuilder submerisbleTurn = submersible.endTrajectory().fresh()
-//                .lineToX(-26)
-                .turnTo(Math.toRadians(turnAmount));
-        Actions.runBlocking(
-                new SequentialAction(
-                        new ParallelAction(
-                                submerisbleTurn.build(),
-                                new SequentialAction(
-                                        autoIntakeSpiner(-1, 0),
-                                        autoIntakeServoAxonAction(0.97, 0.25),
-                                        autoIntakeSliderAction(300, .2, 0)
+                                        autoOuttakeSliderAction(0, 1),
+                                        autoouttakeExtensionAction(0.98, 0),
+                                        autoOuttakeArmAxonAction(0.36, 0)
                                 )
                         ),
-                        AutoColorSensor(),
-                        autoIntakeServoAxonAction(intakeAxonPosition, 0),
-                        //Move to basket
-                        autoIntakeSliderAction(1, 0.4, 0),
-                        new ParallelAction(
-                                autoIntakeSpiner(0, 0),
-                                turnToBasket2.build(),
-                                new SequentialAction(
-                                        autoIntakeSpiner(0, 0.5),
-                                        autoOuttakeArmAxonAction(grabPosition, 0.1),
-                                        autoClawAction(0.3, 0.25),
-                                        autoOuttakeSliderHighBasketAction(),
-                                        autoOuttakeArmAxonAction(0.75, 0),
-                                        autoouttakeExtensionAction(0.8, 0.25)
-                                )
-                        ),
-
-                        //Final
-                        autoClawAction(0, 0.15),
-                        autoouttakeExtensionAction(1, 0),
-                        autoOuttakeSliderAction(0, 1),
-                        autoOuttakeArmAxonAction(readyPosition, 10)
-
+                autoOuttakeArmAxonAction(0.62, 10)
                 )
-
         );
 
 //}

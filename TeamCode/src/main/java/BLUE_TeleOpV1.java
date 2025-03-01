@@ -788,25 +788,25 @@ public class BLUE_TeleOpV1 extends OpMode {
         /**************  TELEMETRY MAY SLOW DOWN LOOP if many I2C calls  ************************/
         telemetryA.addData("Runtime (seconds) = ", "%.1f", getRuntime());
         //telemetryA.addData("Robot Driving Orientation = ", drivingOrientation);
-        telemetryA.addData("State = ", state);
+      //  telemetryA.addData("State = ", state);
         //telemetryA.addData("Time in State (seconds) = ", 0);
         //telemetryA.addData("lastTime = ", lastTime);
+        //telemetryA.addLine(" ");
+        telemetryA.addData("1OuttakeSlider LEFT Current mA = ", robot.Outtake.getOuttakeSliderLeftCurrent());
+        telemetryA.addData("1Outtake LEFT slide Position: ", robot.Outtake.outtakeLeftSlide.getCurrentPosition());
         telemetryA.addLine(" ");
-        telemetryA.addData("OuttakeSlider LEFT Current mA = ", robot.Outtake.getOuttakeSliderLeftCurrent());
-        telemetryA.addData("Outtake LEFT slide Position: ", robot.Outtake.outtakeLeftSlide.getCurrentPosition());
+        telemetryA.addData("2OuttakeSlider RIGHT Current mA = ", robot.Outtake.getOuttakeSliderRightCurrent());
+        telemetryA.addData("3Outtake RIGHT slide Position: ",robot.Outtake.outtakeRightSlide.getCurrentPosition());
         telemetryA.addLine(" ");
-        telemetryA.addData("OuttakeSlider RIGHT Current mA = ", robot.Outtake.getOuttakeSliderRightCurrent());
-        telemetryA.addData("Outtake RIGHT slide Position: ",robot.Outtake.outtakeRightSlide.getCurrentPosition());
+        telemetryA.addData("5Outtake Arm Position actual reading: ",robot.Outtake.getOuttakeArmPosition());
+        telemetryA.addData("6Outtake Arm set position: ", robot.Outtake.outtakeArmAxon.getPosition());
+        telemetryA.addData("7Outtake claw Position: ", robot.Outtake.claw.getPosition());
         telemetryA.addLine(" ");
-        telemetryA.addData("Outtake Arm Position actual reading:",robot.Outtake.getOuttakeArmPosition());
-        telemetryA.addData("Outtake Arm set position:", robot.Outtake.outtakeArmAxon.getPosition());
-        telemetryA.addData("Outtake claw Position: ", robot.Outtake.claw.getPosition());
+        telemetryA.addData("8Intake slider Current mA = ", robot.Intake.getIntakeSlideCurrent());
+        telemetryA.addData("9Intake slider Position: ", robot.Intake.intakeSlides.getCurrentPosition());
         telemetryA.addLine(" ");
-        telemetryA.addData("Intake slider Current mA = ", robot.Intake.getIntakeSlideCurrent());
-        telemetryA.addData("Intake slider Position: ", robot.Intake.intakeSlides.getCurrentPosition());
-        telemetryA.addLine(" ");
-        telemetryA.addData("Intake Axon Servo Position actual reading:",robot.Intake.getIntakeServoAxonPosition());
-        telemetryA.addData("Intake Axon Servo set position:", robot.Intake.getIntakeServoAxonPosition());
+        telemetryA.addData("Intake Axon Servo Position actual: ",robot.Intake.getIntakeServoAxonPosition());
+        telemetryA.addData("Intake Axon Servo set position: ", robot.Intake.getIntakeServoAxonPosition());
         telemetryA.addLine(" ");
 
 //        Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
@@ -851,7 +851,7 @@ public class BLUE_TeleOpV1 extends OpMode {
         loopTimeTotal = loopTimeTotal + loopTime.milliseconds();
         loopTimeCount = loopTimeCount + 1;
         loopTimeAverMilliSec = loopTimeTotal/loopTimeCount;
-        telemetryA.addData("Average loop Time (ms) = ", "%.3f", loopTimeAverMilliSec);
+        telemetryA.addData("Average loop Time (ms) = ", "%.1f", loopTimeAverMilliSec);
 
         writeDatalog();         //TODO: if having Datalogging take too much loop lime (test with init loop above),then remove
         telemetryA.update();
