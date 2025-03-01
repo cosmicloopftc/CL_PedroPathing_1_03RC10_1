@@ -23,8 +23,8 @@ import Hardware.HardwareNoDriveTrainRobot;
  *
  * */
 
-@Config
-@TeleOp(group="Secondary", name= "DebugOpMode Diagnostic 1.1")
+//@Config
+//@TeleOp(group="Secondary", name= "DebugOpMode Diagnostic 1.1")
 
 
 public class DebugOpMode extends OpMode {
