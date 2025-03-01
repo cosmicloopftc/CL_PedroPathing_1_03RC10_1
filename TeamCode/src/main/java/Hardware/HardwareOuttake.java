@@ -90,7 +90,7 @@ public class HardwareOuttake {
         outtakeExtension.setPosition(1);
     }
     public void extendOUT(){
-        outtakeExtension.setPosition(0.85); //All the way out is 0.75, 0.85 is within the robot
+        outtakeExtension.setPosition(0.82); //All the way out is 0.75, 0.85 is within the robot
     }
     public void groundPosition(){
         leftSlideSetPositionPower(0,1);
@@ -107,7 +107,7 @@ public class HardwareOuttake {
         closeClaw();
     }
 
-    public void readyPosition(){ // TODO: Do we need this?
+    public void readyPosition(){
         leftSlideSetPositionPower(0,1);
         rightSlideSetPositionPower(0,1);
         outtakeArmAxon.setPosition(0.43); //Figure out position for transfering
@@ -140,7 +140,7 @@ public class HardwareOuttake {
         extendIN();
     }
     public void highChamberFinishUpwards(){
-        leftSlideSetPositionPower(1630,1); //Find position (Go down from high chamber set position)
+        leftSlideSetPositionPower(1630,1); //TODO: Find correct position; Old = 1630
         rightSlideSetPositionPower(1630,1);
         outtakeArmAxon.setPosition(0.9); //Should be same as wall intake
         extendIN();
