@@ -1,7 +1,5 @@
 import android.graphics.Color;
 
-import com.qualcomm.ftccommon.configuration.EditActivity;
-import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerImpl;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -10,7 +8,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
-import com.acmerobotics.roadrunner.Pose2d;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.localization.PoseUpdater;
@@ -20,21 +17,16 @@ import com.pedropathing.util.DashboardPoseTracker;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.List;
-import java.util.Timer;
 
 import Hardware.HardwareDrivetrain;
 import Hardware.HardwareNoDriveTrainRobot;
@@ -90,6 +82,9 @@ import Diagnostic.Datalogger;
 @TeleOp(group="Primary", name= "BLUE_TeleOpV1.3")
 
 public class BLUE_TeleOpV1 extends OpMode {
+    boolean isGP2rightYupdown = false;
+    boolean isGP2leftYupdown = false;
+
     /** For datalog 2/20/2025 */
     VoltageSensor battery;
     String datalogOpModeStatus;
@@ -104,7 +99,7 @@ public class BLUE_TeleOpV1 extends OpMode {
     String allianceColor;               //Value is assigned in init()
     String nonAllianceColor;            //Value is assigned in init()
 
-    private Telemetry telemetryA;
+    public Telemetry telemetryA;
     //boolean endGameRumble45secondsWarningOnce = true;
     //boolean endGameRumble31secondSTARTonce = true;
     boolean endGameRumble16secondsLeftOnce = true;
@@ -233,13 +228,24 @@ public class BLUE_TeleOpV1 extends OpMode {
         pathState = pState;
         pathTimer.reset();
     }
+    double motorPowerDefault;
+    boolean isGamepad2_yPressed = false;
+    int intakeSliderPresentPosition;
+    double intakeSliderCurrentDraw;
+    double intakeSliderAngularVelocity;   //TODO: what is the unit
+    int outtakeSlider_Right_PresentPosition;
+    double outtakeSlider_Right_CurrentDraw;
+    double outtakeSlider_Right_AngularVelocity;   //TODO: what is the unit
+    String intakeOptionInitLoop = "Intake Slider at zero";
+    String outtakeOptionInitLoop = "Outtake Slider at zero";
+
 
     //__________________________________________________________________________________________________
     @Override
     public void init() {
         String allianceColor = "BLUE";
         String nonAllianceColor = "RED";
-
+        motorPowerDefault = 0.8;
 
 
         poseUpdater = new PoseUpdater(hardwareMap);
@@ -298,6 +304,76 @@ public class BLUE_TeleOpV1 extends OpMode {
         bulkReadTELEOP();
         botHeadingImu = imuAngle;
 
+
+
+
+
+
+
+
+/**testing zeroing of Outtake slider to ground position*****/
+        telemetryA.addLine("testing");
+        telemetryA.addLine("gamepad2 y/a = slider up/dowm");
+        telemetryA.addLine("...dpad up/down = slider out/in");
+
+
+        //TODO: if right outtake slider is <10 position and
+        //      angular velocity is <5 degree/sec <0.02 (1 degree = 0.175 radian), then reset slider to ZERO position, need to test and adjust
+        if ((outtakeSlider_Right_PresentPosition < 20) && (Math.abs(outtakeSlider_Right_AngularVelocity)<1) && !(gamepad2.right_stick_y > 0.1) && !(gamepad2.left_stick_y > 0.1)){
+            robot.Outtake.outtakeLeftSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            robot.Outtake.outtakeRightSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            //robot.Outtake.outtakeLeftSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);  //TODO: do we need this line?
+            //robot.Outtake.outtakeRightSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER); //TODO: do we need this line?
+            outtakeOptionInitLoop = "reset Outtake Slider to zero";
+        }
+
+        if(gamepad2.y) {
+            robot.Outtake.slidersOnlyHighBasket();
+            outtakeOptionInitLoop = "Outtake Slider--highBasket";
+        }
+        if (gamepad2.a) {
+            robot.Outtake.groundPosition();
+            outtakeOptionInitLoop = "Outtake Slider--Ground";
+        }
+
+
+
+/**testing zeroing of Intake slider zero position*****/
+        if(gamepad2.dpad_up) {
+            robot.Intake.intakeSlideOUT();
+            robot.Intake.intakeDOWN();
+            intakeOptionInitLoop = "Intake Slider--OUT";
+        }
+        if (gamepad2.dpad_down) {
+            robot.Intake.intakeSlideIN();
+            robot.Intake.intakeTRANSFER();
+            intakeOptionInitLoop = "Intake Slider--IN, zero";
+        }
+
+        //TODO: if right outtake slider is <10 position and
+        //      angular velocity is <0.02 (1 degree = 0.175 radian), then reset slider to ZERO position, need to test and adjust
+        if ((intakeSliderPresentPosition < 20) && (Math.abs(intakeSliderAngularVelocity)<1)){
+            robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+           //robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER); //TODO: do we need this line?
+            intakeOptionInitLoop = "reset Intake Slider to zero";
+        }
+
+        telemetryA.addLine(outtakeOptionInitLoop);
+        telemetryA.addLine(intakeOptionInitLoop);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //        robot.LED.LEDinitReady();
 //
 //        telemetryA.setMsTransmissionInterval(50);
@@ -350,10 +426,12 @@ public class BLUE_TeleOpV1 extends OpMode {
         loopTimeTotal = loopTimeTotal + loopTime.milliseconds();
         loopTimeCount = loopTimeCount + 1;
         loopTimeAverMilliSec = loopTimeTotal/loopTimeCount;
+        writeDatalog();             //TODO: check on effect of loopTimeAverMilliSec with and without this datalogging
         telemetryA.addData("Average loop Time (ms) = ", "%.3f", loopTimeAverMilliSec);
 
+
+        telemetrySubsystemStatus();
         telemetryA.update();
-        writeDatalog();             //TODO: check on effect of loopTimeAverMilliSec with and without this datalogging
 
     }
 
@@ -391,6 +469,28 @@ public class BLUE_TeleOpV1 extends OpMode {
         bulkReadTELEOP();
         botHeadingImu = imuAngle;
         loopTime.reset();
+        //TODO: if right outtake slider is <10 position and
+        //      angular velocity is <1 tick/second (1 degree = 0.175 radian), then reset slider to ZERO position
+        if ((outtakeSlider_Right_PresentPosition < 10) &&
+                (Math.abs(outtakeSlider_Right_AngularVelocity)<1)
+                && (isGP2rightYupdown || isGP2leftYupdown)){
+                //!((Math.abs(gamepad2.right_stick_y) > 0.0)) || (Math.abs(gamepad2.left_stick_y) > 0.0)){
+            //){
+            robot.Outtake.outtakeLeftSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            robot.Outtake.outtakeRightSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            //robot.Outtake.outtakeLeftSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);  //TODO: do we need this line?
+            //robot.Outtake.outtakeRightSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER); //TODO: do we need this line?
+            //outtakeOptionInitLoop = "reset Outtake Slider to zero";
+        }
+        //TODO: if right outtake slider is <10 position and
+        //      angular velocity is <1 tick/second (1 degree = 0.175 radian), then reset slider to ZERO position, need to test and adjust
+        if ((intakeSliderPresentPosition < 5) && (Math.abs(intakeSliderAngularVelocity)<1)){
+            robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            //robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER); //TODO: do we need this line?
+            //intakeOptionInitLoop = "reset Intake Slider to zero";
+        }
+
+
 
         switch (state) {
             case START:
@@ -435,7 +535,7 @@ public class BLUE_TeleOpV1 extends OpMode {
                 }
                 break;
             case INTAKE:
-                telemetryAllColorInfo();
+                //telemetryAllColorInfo();
 //                if (sampleColor.equals("NONE")){
 //                    robot.LED.ledStick.setColor(1, Color.WHITE);
 //                    robot.LED.ledStick.setBrightness(1,1);
@@ -508,10 +608,10 @@ public class BLUE_TeleOpV1 extends OpMode {
 //                telemetryA.addData("Outtake Arm set position:", robot.Outtake.outtakeArmAxon.getPosition());
 //                telemetryA.addData("Intake Axon Servo Position actual reading:",robot.Intake.getIntakeServoAxonPosition());
 //                telemetryA.addData("Intake Axon Servo set position:", robot.Intake.getIntakeServoAxonPosition());
-                if (robot.Outtake.getOuttakeArmPosition() < 0.4 && robot.Outtake.getOuttakeArmPosition() > 0.32 && robot.Outtake.outtakeArmAxon.getPosition() < 0.35) {
+                if (/*robot.Outtake.getOuttakeArmPosition() < 0.4 && robot.Outtake.getOuttakeArmPosition() > 0.32 &&*/ robot.Outtake.outtakeArmAxon.getPosition() < 0.35 && gamepad2.left_trigger > 0.2) {
                     robot.Outtake.closeClaw();
                 }
-                else{
+                else if(gamepad2.left_bumper){
                     robot.Outtake.openClaw();
                 }
                 if (gamepad1.left_trigger > 0.2 && robot.Intake.intakeServoAxon.getPosition() < 0.7){
@@ -568,17 +668,18 @@ public class BLUE_TeleOpV1 extends OpMode {
 //                telemetryA.addData("Outtake claw Position: ",robot.Outtake.claw.getPosition());
 //                telemetryA.addData("Outtake left slide Position: ",robot.Outtake.outtakeLeftSlide.getCurrentPosition());
                 if (outtakeOption.equals("highBasket")){
-                    robot.Outtake.leftSlideSetPositionPower(2375,1);
-                    robot.Outtake.rightSlideSetPositionPower(2375,1);
-                    if (robot.Outtake.outtakeLeftSlide.getCurrentPosition()>1400){
+                    robot.Outtake.leftSlideSetPositionPower(875,1);
+                    robot.Outtake.rightSlideSetPositionPower(875,1);
+                    if (robot.Outtake.outtakeLeftSlide.getCurrentPosition()>200){
                         robot.Outtake.highBasket();
                     }
                 }
-                if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 2350 && gamepad2.left_bumper){ // If at high basket position
+                if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 825 && gamepad2.left_bumper){ // If at high basket position
                     robot.Outtake.openClaw();
                 }
-                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 2350 && gamepad2.a && robot.Outtake.claw.getPosition() < 0.05){ // Should robot make sure claw is open before going down
-                    state = State.READY_DOWN;
+                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 825 && gamepad2.a && robot.Outtake.claw.getPosition() < 0.05){ // Should robot make sure claw is open before going down
+                    outtakeOption = "start";
+                    state = State.START;
                 }
 
 
@@ -613,7 +714,7 @@ public class BLUE_TeleOpV1 extends OpMode {
                         }
                     }
                 }
-                if (robot.Outtake.outtakeArmAxon.getPosition() < 0.3  && gamepad2.left_trigger > 0.2){ // Only if at wall intake position
+                if (robot.Outtake.outtakeArmAxon.getPosition() < 0.35  && gamepad2.left_trigger > 0.2){ // Only if at wall intake position
                     robot.Outtake.closeClaw();
                     outtakeOption = "";
                 }
@@ -621,40 +722,43 @@ public class BLUE_TeleOpV1 extends OpMode {
                     robot.Outtake.openClaw();
                 }
                 if (gamepad2.x){
-                    robot.Outtake.leftSlideSetPositionPower(1260,1);
-                    robot.Outtake.rightSlideSetPositionPower(1260,1);
+                    robot.Outtake.leftSlideSetPositionPower(475,1);
+                    robot.Outtake.rightSlideSetPositionPower(475,1);
                     outtakeOption = "highChamber";
                 }
 
                 if (outtakeOption.equals("highChamber") && robot.Outtake.outtakeLeftSlide.getCurrentPosition()>100){
                     robot.Outtake.highChamberSetUpwards();
                 }
-                if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 1100 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 1300 && (gamepad2.b || gamepad2.left_bumper)){ // Open claw if specimen scored
+                if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 450 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 525 && (gamepad2.left_bumper)){ // Open claw if specimen scored
                     robot.Outtake.openClaw();
                 }
-                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 1100 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 1300 && robot.Outtake.claw.getPosition() < 0.05 && gamepad2.a){ // Only if at high Chamber set position and claw is open
+                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 450 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 525 && robot.Outtake.claw.getPosition() < 0.05 && gamepad2.a){ // Only if at high Chamber set position and claw is open
                     state = State.READY_DOWN;
                 }
-                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 1100 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 1300 && robot.Outtake.claw.getPosition() < 0.05 && gamepad2.dpad_down){ // Only if at high Chamber set position and claw is open
+                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 450 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 525 && robot.Outtake.claw.getPosition() < 0.05 && gamepad2.dpad_down){ // Only if at high Chamber set position and claw is open
                     outtakeOption = "wallIntakeFront";
                 }
-//                if (robot.Outtake.outtakeArmAxon.getPosition() == 0.9 && gamepad2.left_bumper){ // Only if at high chamber set position
-//                    outtakeOption = "highChamberFinish";
-//                }
-////
-//                if (outtakeOption.equals("highChamberFinish")){
-//                    robot.Outtake.highChamberFinishUpwards();
-//                }
-//                if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 1550 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 1700 && gamepad2.left_bumper){ // If at high chamber finish position
-//                    robot.Outtake.openClaw();
-//                }
-//
-//                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 1550 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 1700 && robot.Outtake.claw.getPosition() < 0.05 && gamepad2.a){ // Only if at high Chamber finish position and claw is open
-//                    state = State.READY_DOWN;
-//                }
-//                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 1550 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 1700 && robot.Outtake.claw.getPosition() < 0.05 && gamepad2.dpad_down){ // Only if at high Chamber finish position and claw is open
-//                    outtakeOption = "wallIntakeFront";
-//                }
+                //Option to score specimen by moving slides up
+                if (robot.Outtake.outtakeArmAxon.getPosition() > 0.85 && gamepad2.b){ // Only if at high chamber set position
+                    outtakeOption = "highChamberFinish";
+                }
+                if (outtakeOption.equals("highChamberFinish")){
+                    robot.Outtake.highChamberFinishUpwards();
+                }
+                if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 525 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 700 && gamepad2.left_bumper){ // If at high chamber finish position
+                    robot.Outtake.openClaw();
+                }
+                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 525 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 700 && robot.Outtake.claw.getPosition() < 0.05 && gamepad2.a){ // Only if at high Chamber finish position and claw is open
+                    state = State.READY_DOWN;
+                }
+                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 525 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 700 && robot.Outtake.claw.getPosition() < 0.05 && gamepad2.dpad_down){ // Only if at high Chamber finish position and claw is open
+                    outtakeOption = "wallIntakeFront";
+                }
+                if (gamepad1.y)
+                {
+                    state = State.START;
+                }
                 break;
             case READY_DOWN:
                 robot.Outtake.readyPosition();
@@ -669,11 +773,17 @@ public class BLUE_TeleOpV1 extends OpMode {
         //Hang testing:
         // Move slides up before hanging
         if (gamepad1.y) {
+            robot.Outtake.outtakeArmAxon.setPosition(0.43);
+            robot.Outtake.extendIN();
+            robot.Outtake.openClaw();
             robot.Outtake.leftSlideSetPositionPower(2600, 1);
             robot.Outtake.rightSlideSetPositionPower(2600, 1);
         }
         // Pull slides down to hang
         else if(gamepad1.x) {
+            robot.Outtake.outtakeArmAxon.setPosition(0.43);
+            robot.Outtake.extendIN();
+            robot.Outtake.openClaw();
             robot.Outtake.leftSlideSetPositionPower(1400, 1);
             robot.Outtake.rightSlideSetPositionPower(1400, 1);
         }
@@ -685,12 +795,16 @@ public class BLUE_TeleOpV1 extends OpMode {
             int currentRightSlidePosition = robot.Outtake.outtakeRightSlide.getCurrentPosition();
             robot.Outtake.outtakeLeftSlide.setTargetPosition(currentLeftSlidePosition + 50);
             robot.Outtake.outtakeRightSlide.setTargetPosition(currentRightSlidePosition + 50);
+            boolean isGP2rightYupdown = true;
+            boolean isGP2leftYupdown = true;
         }
         if (gamepad2.right_stick_y  < -0.1 || gamepad2.left_stick_y  < -0.1){
             int currentLeftSlidePosition = robot.Outtake.outtakeLeftSlide.getCurrentPosition();
             int currentRightSlidePosition = robot.Outtake.outtakeRightSlide.getCurrentPosition();
             robot.Outtake.outtakeLeftSlide.setTargetPosition(currentLeftSlidePosition - 50);
             robot.Outtake.outtakeRightSlide.setTargetPosition(currentRightSlidePosition - 50);
+            boolean isGP2rightYupdown = true;
+            boolean isGP2leftYupdown = true;
         }
         if (gamepad2.ps){
             robot.Outtake.outtakeLeftSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -699,7 +813,8 @@ public class BLUE_TeleOpV1 extends OpMode {
             robot.Outtake.outtakeRightSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
 
-
+        isGP2rightYupdown = false;
+        isGP2leftYupdown = false;
 
 //        if (sampleColor.equals("YELLOW")){
 //            robot.LED.ledStick.setColor(Color.YELLOW);
@@ -750,19 +865,19 @@ public class BLUE_TeleOpV1 extends OpMode {
         //  }
         //DRIVETRAIN
         //baseline speed =  reduce motor speed to 60% max
-        double motorPowerDefault = 0.5;
+        //double motorPowerDefault = 0.5;
         double powerChange;
 
         //SLOW DOWN with RIGHT LOWER TRIGGER (lower of the top side button) press with the other gamepad stick.
         if ((Math.abs(gamepad1.left_stick_y) > 0.1 && gamepad1.right_trigger > 0.1) || (Math.abs(gamepad1.left_stick_x) > 0.1 && gamepad1.right_trigger > 0.1) || (Math.abs(gamepad1.right_stick_x) > 0.1 && gamepad1.right_trigger > 0.1)) {
-            powerChange = -0.2;
+            powerShift  = 0.5;
             //SPEED UP with RIGHT UPPER BUMPER (up of the top side button) press with the other gamepad stick.
         } else if ((Math.abs(gamepad1.left_stick_y) > 0.1 && gamepad1.right_bumper) || (Math.abs(gamepad1.left_stick_x) > 0.1 && gamepad1.right_bumper) || (Math.abs(gamepad1.right_stick_x) > 0.1 && gamepad1.right_bumper)) {
-            powerChange = 0.5;
+            powerShift  = 1.0;
         } else {
-            powerChange = 0;
+            powerShift  = motorPowerDefault;
         }
-        powerShift = motorPowerDefault + powerChange;
+        //powerShift = motorPowerDefault + powerChange;
 
 /**12/18/2024--THIS IS COMMENTED OUT WHEN USING PEDROPATHING TO DRIVE ROBOT
  drivetrain.drive(y, x, rx, powerShift, botHeadingImu, drivingOrientation);
@@ -788,25 +903,25 @@ public class BLUE_TeleOpV1 extends OpMode {
         /**************  TELEMETRY MAY SLOW DOWN LOOP if many I2C calls  ************************/
         telemetryA.addData("Runtime (seconds) = ", "%.1f", getRuntime());
         //telemetryA.addData("Robot Driving Orientation = ", drivingOrientation);
-        telemetryA.addData("State = ", state);
+      //  telemetryA.addData("State = ", state);
         //telemetryA.addData("Time in State (seconds) = ", 0);
         //telemetryA.addData("lastTime = ", lastTime);
+        //telemetryA.addLine(" ");
+        telemetryA.addData("1OuttakeSlider LEFT Current mA = ", robot.Outtake.getOuttakeSliderLeftCurrent());
+        telemetryA.addData("1Outtake LEFT slide Pos: ", robot.Outtake.outtakeLeftSlide.getCurrentPosition());
         telemetryA.addLine(" ");
-        telemetryA.addData("OuttakeSlider LEFT Current mA = ", robot.Outtake.getOuttakeSliderLeftCurrent());
-        telemetryA.addData("Outtake LEFT slide Position: ", robot.Outtake.outtakeLeftSlide.getCurrentPosition());
+        telemetryA.addData("2OuttakeSlider RIGHT Current mA = ", robot.Outtake.getOuttakeSliderRightCurrent());
+        telemetryA.addData("3Outtake RIGHT slide Pos: ",robot.Outtake.outtakeRightSlide.getCurrentPosition());
         telemetryA.addLine(" ");
-        telemetryA.addData("OuttakeSlider RIGHT Current mA = ", robot.Outtake.getOuttakeSliderRightCurrent());
-        telemetryA.addData("Outtake RIGHT slide Position: ",robot.Outtake.outtakeRightSlide.getCurrentPosition());
+        telemetryA.addData("5Outtake Axon Arm actual Pos: ",robot.Outtake.getOuttakeArmPosition());
+        telemetryA.addData("6Outtake Axon Arm set Pos: ", robot.Outtake.outtakeArmAxon.getPosition());
+        telemetryA.addData("7Outtake claw Pos: ", robot.Outtake.claw.getPosition());
         telemetryA.addLine(" ");
-        telemetryA.addData("Outtake Arm Position actual reading:",robot.Outtake.getOuttakeArmPosition());
-        telemetryA.addData("Outtake Arm set position:", robot.Outtake.outtakeArmAxon.getPosition());
-        telemetryA.addData("Outtake claw Position: ", robot.Outtake.claw.getPosition());
+        telemetryA.addData("8Intake slider Current mA = ", robot.Intake.getIntakeSlideCurrent());
+        telemetryA.addData("9Intake slider Pos: ", robot.Intake.intakeSlides.getCurrentPosition());
         telemetryA.addLine(" ");
-        telemetryA.addData("Intake slider Current mA = ", robot.Intake.getIntakeSlideCurrent());
-        telemetryA.addData("Intake slider Position: ", robot.Intake.intakeSlides.getCurrentPosition());
-        telemetryA.addLine(" ");
-        telemetryA.addData("Intake Axon Servo Position actual reading:",robot.Intake.getIntakeServoAxonPosition());
-        telemetryA.addData("Intake Axon Servo set position:", robot.Intake.getIntakeServoAxonPosition());
+        telemetryA.addData("Intake Axon actual Pos: ",robot.Intake.getIntakeServoAxonPosition());
+        telemetryA.addData("Intake Axon set Pos: ", robot.Intake.getIntakeServoAxonPosition());
         telemetryA.addLine(" ");
 
 //        Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
@@ -842,7 +957,7 @@ public class BLUE_TeleOpV1 extends OpMode {
         //3 rumble for 8 seconds left for hanging
         if ((runtime.seconds() > 112 ) && endGameRumble8secondsLeftOnce) {
             rumble6sec();
-            telemetryA.addLine("8 SECONDS LEFT---HANGING NOW");
+            telemetryA.addLine("10 SECONDS LEFT---HANGING NOW");
             telemetryA.addLine("");
             endGameRumble16secondsLeftOnce = false;
             gamepad1.runLedEffect(flashingRed6Sec);
@@ -851,7 +966,7 @@ public class BLUE_TeleOpV1 extends OpMode {
         loopTimeTotal = loopTimeTotal + loopTime.milliseconds();
         loopTimeCount = loopTimeCount + 1;
         loopTimeAverMilliSec = loopTimeTotal/loopTimeCount;
-        telemetryA.addData("Average loop Time (ms) = ", "%.3f", loopTimeAverMilliSec);
+        telemetryA.addData("Average loop Time (ms) = ", "%.1f", loopTimeAverMilliSec);
 
         writeDatalog();         //TODO: if having Datalogging take too much loop lime (test with init loop above),then remove
         telemetryA.update();
@@ -871,7 +986,31 @@ public class BLUE_TeleOpV1 extends OpMode {
         imuAngle = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);       //0. direction is reverse
         batteryStatus = battery.getVoltage();
         //newRightEncoder = robot.RBack_Motor.getCurrentPosition();       //1.
+        intakeSliderPresentPosition = robot.Intake.intakeSlides.getCurrentPosition();
+        intakeSliderCurrentDraw = robot.Intake.intakeSlides.getCurrent(CurrentUnit.MILLIAMPS);
+        intakeSliderAngularVelocity = robot.Intake.intakeSlides.getVelocity();   //TODO: what is the unit
+        outtakeSlider_Right_PresentPosition = robot.Outtake.outtakeRightSlide.getCurrentPosition();
+        outtakeSlider_Right_CurrentDraw = robot.Outtake.outtakeRightSlide.getCurrent(CurrentUnit.MILLIAMPS);
+        outtakeSlider_Right_AngularVelocity = robot.Outtake.outtakeRightSlide.getVelocity();   //TODO: what is the unit
+
     }
+    public void telemetrySubsystemStatus(){
+        telemetryA.addData("1intakeSliderCurrent mA: ", intakeSliderCurrentDraw);
+        telemetryA.addData("1intakeSliderPosition: ", intakeSliderPresentPosition);
+        telemetryA.addData("1intakeSliderAnVel Deg: ", Math.toDegrees(intakeSliderAngularVelocity));
+        telemetryA.addLine(" ");
+        telemetryA.addData("2outtakeSlider_R_Current mA: ", outtakeSlider_Right_CurrentDraw);
+        telemetryA.addData("2outtakeSlider_R_Position: ", outtakeSlider_Right_PresentPosition);
+        telemetryA.addData("2outtakeSlider_R_AngVel Deg: ", Math.toDegrees(outtakeSlider_Right_AngularVelocity));
+        telemetryA.addLine(" ");
+    }
+
+
+
+
+
+
+
     public void writeDatalog() {
         if (dataTimer.time() > logInterval) {
             readCount++;

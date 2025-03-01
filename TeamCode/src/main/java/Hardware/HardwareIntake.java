@@ -107,20 +107,20 @@ public class HardwareIntake {
 
     //method for the extended position of the intake slides
     public void intakeSlideOUT() {
-        intakeSlideSetPositionPower(310,0.8); //Far out position (within extension limit)
+        intakeSlideSetPositionPower(350,0.8); //Far out position (within extension limit)
     }
     public void intakeSlideMID() {
-        intakeSlideSetPositionPower(200,0.8); //Middle position
+        intakeSlideSetPositionPower(230,0.8); //Middle position
     }
 
     public void intakeDOWN(){
-        intakeServoAxon.setPosition(0.97); //Position when intaking
+        intakeServoAxon.setPosition(1); //Position when intaking
     }
     public void intakeUP(){
         intakeServoAxon.setPosition(0.87); //Position when down, but not intaking
     }
     public void intakeINSIDEBOT(){
-        intakeServoAxon.setPosition(0.52); //Position when grabbing specimen off wall
+        //intakeServoAxon.setPosition(0.52); //Position when grabbing specimen off wall
     }
     public void intakeTRANSFER(){
         intakeServoAxon.setPosition(0.635); //Position where sample gets grabbed out of intake
