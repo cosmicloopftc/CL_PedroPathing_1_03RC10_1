@@ -39,8 +39,8 @@ import Hardware.HardwareNoDriveTrainRobot;
  */
 
 
-@Config
-@Autonomous(name = "RR_3AutoRedSpecimen_Turn_5Spec v1.1", group = "Auto")
+//@Config
+//@Autonomous(name = "RR_3AutoRedSpecimen_Turn_5Spec v1.1", group = "Auto")
 public class RR_3AutoRedSpecimen_5SpecTurn extends LinearOpMode {
 
 
