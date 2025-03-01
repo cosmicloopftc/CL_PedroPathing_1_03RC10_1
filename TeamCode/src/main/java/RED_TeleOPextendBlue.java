@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * */
 
 @Config
-@TeleOp(group="Primary", name= "RED TeleOp by extendclass1.1")
+@TeleOp(group="Primary", name= "RED TeleOp by extendclass 1.1")
 
 
 public class RED_TeleOPextendBlue extends BLUE_TeleOpV1 {

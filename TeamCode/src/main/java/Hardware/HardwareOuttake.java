@@ -90,12 +90,12 @@ public class HardwareOuttake {
         outtakeExtension.setPosition(1);
     }
     public void extendOUT(){
-        outtakeExtension.setPosition(0.85); //All the way out is 0.75, 0.85 is within the robot
+        outtakeExtension.setPosition(0.78); //All the way out is 0.75, 0.85 is within the robot
     }
     public void groundPosition(){
         leftSlideSetPositionPower(0,1);
         rightSlideSetPositionPower(0,1);
-        outtakeArmAxon.setPosition(0.34);  // by Eduardo 2/17/25 (0.34); //TODO: Find position for transfering (stays the same throughout process)
+        outtakeArmAxon.setPosition(0.29);  // by Eduardo 2/17/25 (0.34); //TODO: Find position for transfering (stays the same throughout process)
         extendIN();
         //openClaw();
     }
@@ -107,10 +107,10 @@ public class HardwareOuttake {
         closeClaw();
     }
 
-    public void readyPosition(){ // TODO: Do we need this?
+    public void readyPosition(){
         leftSlideSetPositionPower(0,1);
         rightSlideSetPositionPower(0,1);
-        outtakeArmAxon.setPosition(0.43); //Figure out position for transfering
+        outtakeArmAxon.setPosition(0.29); //Figure out position for transfering
         extendIN();
         openClaw();
     }
@@ -124,8 +124,8 @@ public class HardwareOuttake {
     public void highBasket(){
         outtakeArmAxon.setPosition(0.78);
         extendIN();
-        leftSlideSetPositionPower(2375,1);
-        rightSlideSetPositionPower(2375,1);
+        leftSlideSetPositionPower(875,1);
+        rightSlideSetPositionPower(875,1);
     }
     public void sampleDelivery(){
         outtakeArmAxon.setPosition(0.9);
@@ -134,21 +134,21 @@ public class HardwareOuttake {
         rightSlideSetPositionPower(0,1);
     }
     public void highChamberSetUpwards(){
-        leftSlideSetPositionPower(1260,1);
-        rightSlideSetPositionPower(1260,1);
+        leftSlideSetPositionPower(475,1);
+        rightSlideSetPositionPower(475,1);
         outtakeArmAxon.setPosition(0.9); //Should be same as wall intake
         extendIN();
     }
     public void highChamberFinishUpwards(){
-        leftSlideSetPositionPower(1630,1); //Find position (Go down from high chamber set position)
-        rightSlideSetPositionPower(1630,1);
+        leftSlideSetPositionPower(615,1); //TODO: Find correct position; Old = 1630
+        rightSlideSetPositionPower(615,1);
         outtakeArmAxon.setPosition(0.9); //Should be same as wall intake
         extendIN();
     }
     public void wallIntakeFront(){
         leftSlideSetPositionPower(0,1);
         rightSlideSetPositionPower(0,1);
-        outtakeArmAxon.setPosition(0.29);
+        outtakeArmAxon.setPosition(0.3);
         extendOUT();
     }
 
@@ -167,8 +167,8 @@ public class HardwareOuttake {
     }
 
     public void slidersOnlyHighBasket(){
-        leftSlideSetPositionPower(2400,1);
-        rightSlideSetPositionPower(2400,1);
+        leftSlideSetPositionPower(875,1);
+        rightSlideSetPositionPower(875,1);
     }
 
 
