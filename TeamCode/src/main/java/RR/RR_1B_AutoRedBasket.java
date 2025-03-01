@@ -43,9 +43,9 @@ import java.util.List;
 import Hardware.HardwareNoDriveTrainRobot;
 
 @Config
-@Autonomous(name = "RR_1B_AUTO_Blue Basket_Submer v1.1", group = "Auto")
+@Autonomous(name = "RR_1B_AUTO_Red Basket_Submer v1.1", group = "Auto")
 
-public class RR_1B_AutoBlueBasket extends LinearOpMode {
+public class RR_1B_AutoRedBasket extends LinearOpMode {
     public static boolean readyToRun = false;
     public static String subPosition = "LimeLight";
     public static int test = 0;
@@ -89,12 +89,10 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
 
         //adjust these settings as needed for use in the trajectory codes
         VelConstraint velSlow = new TranslationalVelConstraint(15);
-        VelConstraint velFast = new TranslationalVelConstraint(55);
-        VelConstraint velPark = new TranslationalVelConstraint(70);
+        VelConstraint velFast = new TranslationalVelConstraint(45);
         AccelConstraint accSlow = new ProfileAccelConstraint(-15, 15);
         AccelConstraint accFast = new ProfileAccelConstraint(-45, 45);
-        AccelConstraint accPark1 = new ProfileAccelConstraint(-60, 60);
-        AccelConstraint accPark2 = new ProfileAccelConstraint(-80, 80);
+        AccelConstraint accPark = new ProfileAccelConstraint(-60, 60);
 
 
 
@@ -140,24 +138,21 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
 
         TrajectoryActionBuilder turnToBasket10 = move.endTrajectory().fresh()
                 .waitSeconds(0.65)
-                .strafeToSplineHeading(new Vector2d(-57.5, -52.5), Math.toRadians(45));
+                .strafeToSplineHeading(new Vector2d(-57.75, -52.75), Math.toRadians(45));
 
         TrajectoryActionBuilder submersible = turnToBasket3.endTrajectory().fresh()
-              //  .setTangent(45)
+                .setTangent(45)
                 .splineToSplineHeading(new Pose2d(-23.25, 0, 0), Math.toRadians(35), velFast, accFast);
 
         TrajectoryActionBuilder turnToBasket2 = submersible.endTrajectory().fresh()
-              //  .setTangent(45)
+                .setTangent(45)
                 .strafeToConstantHeading(new Vector2d(-25, 0), velFast, accFast)
                 .strafeToSplineHeading(new Vector2d(-59.5, -53), Math.toRadians(45.5), velFast, accFast);
 
         TrajectoryActionBuilder submersiblePark = turnToBasket3.endTrajectory().fresh()
-               // .setTangent(45)
-                .strafeToLinearHeading(new Vector2d(-35, -15), Math.toRadians(180), velPark, accPark1)
-                .strafeToLinearHeading(new Vector2d(-22, -15), Math.toRadians(180), velPark, accPark2);  // prev y was -15
-
-//                .strafeToSplineHeading(new Vector2d(-35, -15), Math.toRadians(180), velFast, accFast)
-//                .strafeToSplineHeading(new Vector2d(-22, -15), Math.toRadians(180), velFast, accPark);
+                .setTangent(45)
+                .strafeToSplineHeading(new Vector2d(-42, -15), Math.toRadians(180), velFast, accFast)
+                .strafeToSplineHeading(new Vector2d(-22, -15), Math.toRadians(180), velFast, accPark);
 
 
         //*****LOOP wait for start, INIT LOOP***********************************************************
@@ -292,7 +287,7 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                                         //move to first sample
                                         grabPose3.build()
                                 ),
-                                autoIntakeSliderAction(205, sliderPower-0.35, 0),
+                                autoIntakeSliderAction(210, sliderPower-0.35, 0),
                                 move.build(),
                                 autoIntakeSpiner(0, 0.1),
                                 autoIntakeServoAxonAction(intakeAxonPosition, 0),
@@ -306,10 +301,10 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                                         autoOuttakeSliderHighBasketAction(),
                                         autoIntakeSpiner(1, 0),
                                         turnToBasket10.build(),
-                                        autoOuttakeArmAxonAction(0.77, 0),
+                                        autoOuttakeArmAxonAction(0.78, 0),
                                         autoouttakeExtensionAction(0.8, 0.85)
                                 ),
-                                autoIntakeSpiner(0, 0.4),
+                                autoIntakeSpiner(0, 0.5),
                                 autoClawAction(0, 0.15),
 
                                 //End of V1
@@ -404,8 +399,10 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                                                 autoIntakeSpiner(0, 0.5),
                                                 autoOuttakeArmAxonAction(grabPosition, 0.1),
                                                 autoClawAction(0.3, 0.25),
+                                                autoIntakeSpiner(1, 0),
                                                 autoOuttakeSliderHighBasketAction(),
                                                 autoOuttakeArmAxonAction(0.75, 0),
+                                                autoIntakeSpiner(0, 0),
                                                 autoouttakeExtensionAction(0.8, 0.25)
                                         )
                                 ),
@@ -770,11 +767,11 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
             double green = colors.green;
             if (red > 0.02 && red > green && red > blue) {
                 sampleColor = "RED";
-                autoRobot.Intake.intakeLeftWheel.setPower(1);
-                autoRobot.Intake.intakeRightWheel.setPower(-1);
+
             } else if (blue > 0.02 && blue > green && blue > red) {
                 sampleColor = "BLUE";
-
+                autoRobot.Intake.intakeLeftWheel.setPower(1);
+                autoRobot.Intake.intakeRightWheel.setPower(-1);
             } else if (green > 0.02 && green > red && green > blue) {
                 sampleColor = "YELLOW";
                 //autoRobot.Intake.intakeLeftWheel.setPower(-1);
