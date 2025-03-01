@@ -17,7 +17,6 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
-// pedroPathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -41,8 +40,8 @@ import Hardware.HardwareNoDriveTrainRobot;
 
 
 @Config
-@Autonomous(name = "RR_2AutoRedSpecimen_Push_ParallelMove v1.1", group = "Auto")
-public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
+@Autonomous(name = "RR_2AutoRedSpecimen_5SpecPush v1.1", group = "Auto")
+public class RR_2AutoRedSpecimen_5SpecPush extends LinearOpMode {
 
 
     //TODO: setup initial position for all subsystems
@@ -125,30 +124,32 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
                 .afterTime(10, autoIntakeSliderAction(0,1,0))  //pull/keep Intake slider in before getting to wall
 
                 /** 1st move back from submersible pole--BY SPLINE THEN STRAFE to push Sample 4,5,6 Home*/
-                .splineToLinearHeading(new Pose2d(34,-45, Math.toRadians(-90)),  //spline to side before going to sample4
-                        Math.toRadians(60), velFast, accMedium)
-                .setReversed(true)
-                .strafeTo(new Vector2d(44,-7), velFast, accMedium)                          //strafe from midway to Sample4
+                .setReversed(false)
+                .splineToLinearHeading(new Pose2d(38,-42, Math.toRadians(-90)),         //pushSample6Home, midway by Spline
+                        Math.toRadians(60), velMedium, accMedium)  // TODO 34
+            //    .waitSeconds(0.5)
 
-                .strafeTo(new Vector2d(48, -50), velFast, accFast)      //pushSample4Home
+                //       .setReversed(true)
+                .splineToLinearHeading(new Pose2d(43, -7, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
 
-                .setReversed(true)
-                .strafeTo(new Vector2d(55, -8), velFast, accFast)       //toward Sample5
-                .strafeTo(new Vector2d(56, -50), velFast, accMedium)    //pushSample5Home
+                .splineToLinearHeading(new Pose2d(47, -50, Math.toRadians(-90)), Math.toRadians(-90), velMedium, accMedium)
+
+                .splineToLinearHeading(new Pose2d(54, -7, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
+
+                .splineToLinearHeading(new Pose2d(57, -50, Math.toRadians(-90)), Math.toRadians(-90), velMedium, accMedium)
+
+                .splineToLinearHeading(new Pose2d(62, -7, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
+
+                .splineToLinearHeading(new Pose2d(62, -50, Math.toRadians(-90)), Math.toRadians(-90), velMedium, accMedium)
 
 //                .setReversed(true)
-//                .strafeTo(new Vector2d(62, -8), velFast, accMedium)     //toward Sample6
+//                .strafeTo(new Vector2d(54, -8), velFast, accFast)     //toward Sample5
+//                .strafeTo(new Vector2d(57, -50), velFast, accMedium)  //pushSample5Home
 
-                /** push sample 6 home and goto Wall */
-                .setReversed(false)
-//                .splineToLinearHeading(new Pose2d(62,-34, Math.toRadians(-90)),         //pushSample6Home, midway by Spline
-//                        Math.toRadians(-90), velFast, accMedium)
-//                .splineToLinearHeading(new Pose2d(40,-57, Math.toRadians(-90)),         //pushSample6Home, midway by Spline
-//                        Math.toRadians(-90), velFast, accMedium)
-//                .splineToLinearHeading(new Pose2d(40,-57.5, Math.toRadians(-90)),         //pushSample6Home, midway by Spline
-//                        Math.toRadians(-90), velFast, accMedium)
-                .splineToLinearHeading(new Pose2d(40,-64.5, Math.toRadians(-90)),       //pushSample6Home, by Spline to Wall
-                        Math.toRadians(-90), velFast, accMedium);
+//                .setReversed(true)
+//                .strafeTo(new Vector2d(62, -8), velFast, accMedium)   //toward Sample6
+
+                .splineToLinearHeading(new Pose2d(57, -63.5, Math.toRadians(-90)), Math.toRadians(-90), velMedium, accMedium);
                 // starting pose Y = -63, so need to go back more to wall, so -63.5?  TODO: need to reset Y as "wall squaring method"
 
 
@@ -167,10 +168,10 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
 //                .splineToLinearHeading(new Pose2d(3, -35, Math.toRadians(-90)), Math.toRadians(90), velFast, accMedium); //splineToConstantHeading(new Vector2d(3,-35), Math.toRadians(90), velFast, accMedium);      //straighten out robot with another spline to submersible
                 // scored specimen X = 7.5 (preload), now 3, -1, -5, -9)
 
-            //    .splineToConstantHeading(new Vector2d(38,-61.5),Math.toRadians(135), velFast, accMedium)
-                .splineToConstantHeading(new Vector2d(3,-36),Math.toRadians(90))  // scored specimen X = 7.5 (preload), 3, now -1, -5, -9)
-                .splineToConstantHeading(new Vector2d(3,-35.5),Math.toRadians(90), velFast, accMedium)
-                .splineToConstantHeading(new Vector2d(3,-33), Math.toRadians(90), velFast, accMedium);
+                .strafeTo(new Vector2d(3, -34), velFast, accMedium);
+//                .splineToConstantHeading(new Vector2d(3,-36),Math.toRadians(90))  // scored specimen X = 7.5 (preload), 3, now -1, -5, -9)
+//                .splineToConstantHeading(new Vector2d(3,-35.5),Math.toRadians(90), velFast, accMedium)
+//                .splineToConstantHeading(new Vector2d(3,-33), Math.toRadians(90), velFast, accMedium);
 
 
         /** Collect Spec2 and score Spec2 */
@@ -184,7 +185,9 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
              //   .strafeToLinearHeading(new Vector2d(40,-64.5),
              ///           Math.toRadians(-90), velFast, accMedium);                           //1st move back from submersible pole; **test direct strafe, not spline
                 /** Comment below out to test */
-                .setReversed(true)
+            //    .setReversed(true)
+                //.strafeToLinearHeading(new Vector2d(38,-63.5),
+                //                        Math.toRadians(-90), velFast, accFast)
                 .strafeToLinearHeading(new Vector2d(3,-40),
                         Math.toRadians(-90), velFast, accMedium)  //1st move back from submersible pole
                 .splineToConstantHeading(new Vector2d(38,-62.5),Math.toRadians(-90))      //spline to more to near wall
@@ -196,9 +199,10 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
 //-----------cycle 2 to score Specimen2
         TrajectoryActionBuilder secondScoreSpec = drive.actionBuilder(collectPose) //collectSpec2.endTrajectory().fresh()
                 .setReversed(true)                                                       //need this as robot is moving backward
-                .splineToConstantHeading(new Vector2d(-1,-36),Math.toRadians(90))  // scored specimen X = 7.5 (preload), 3, now -1, -5, -9)
-                .splineToConstantHeading(new Vector2d(-1,-35.5),Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(-1,-33),Math.toRadians(90));
+                .strafeTo(new Vector2d(-1, -34), velFast, accMedium);
+//                .splineToConstantHeading(new Vector2d(-1,-36),Math.toRadians(90))  // scored specimen X = 7.5 (preload), 3, now -1, -5, -9)
+//                .splineToConstantHeading(new Vector2d(-1,-35.5),Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(-1,-33),Math.toRadians(90));
 
 
         /** Collect Spec3 and score Spec3 */
@@ -209,6 +213,8 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
                 .afterTime(0.6, autoOuttakeSliderAction(wallPickup_SliderPos, 1))           //=0 outtake slider position to pickup specimen from wall
 
                 .setReversed(true)
+                //.strafeToLinearHeading(new Vector2d(38,-63.5),
+                //                        Math.toRadians(-90), velFast, accFast)
                 .strafeToLinearHeading(new Vector2d(-1,-40),
                         Math.toRadians(-90), velFast, accMedium)  //1st move back from submersible pole
                 .splineToConstantHeading(new Vector2d(38,-62.5),Math.toRadians(-90))
@@ -219,9 +225,10 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
 //-----------cycle 3 to score Specimen3
         TrajectoryActionBuilder thirdScoreSpec = drive.actionBuilder(collectPose) //collectSpec3.endTrajectory().fresh()
                 .setReversed(true)                                                          //need this as robot is moving backward
-                .splineToConstantHeading(new Vector2d(-5,-36),Math.toRadians(90))   // scored specimen X = 7.5 (preload), 3, -1, now -5, -9)
-                .splineToConstantHeading(new Vector2d(-5,-35.5),Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(-5,-33),Math.toRadians(90));
+                .strafeTo(new Vector2d(-5, -34), velFast, accMedium);
+//                .splineToConstantHeading(new Vector2d(-5,-36),Math.toRadians(90))   // scored specimen X = 7.5 (preload), 3, -1, now -5, -9)
+//                .splineToConstantHeading(new Vector2d(-5,-35.5),Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(-5,-33),Math.toRadians(90));
 
 
         /** Collect Spec4 and score Spec4 */
@@ -232,6 +239,8 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
                 .afterTime(0.6, autoOuttakeSliderAction(wallPickup_SliderPos, 1))           //=0 outtake slider position to pickup specimen from wall
 
                 .setReversed(true)
+                //.strafeToLinearHeading(new Vector2d(38,-63.5),
+                //                        Math.toRadians(-90), velFast, accFast)
                 .strafeToLinearHeading(new Vector2d(-5,-40),
                         Math.toRadians(-90), velFast, accMedium)  //1st move back from submersible pole
                 .splineToConstantHeading(new Vector2d(38,-62.5),Math.toRadians(-90))
@@ -242,9 +251,10 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
 //-----------cycle 4 to score Specimen4
         TrajectoryActionBuilder fourthScoreSpec  = collectSpec4.endTrajectory().fresh()
                 .setReversed(true)                                                              //need this as robot is moving backward
-                .splineToConstantHeading(new Vector2d(-9,-36),Math.toRadians(90))   // scored specimen X = 7.5 (preload), 3, -1, -5, now -9)
-                .splineToConstantHeading(new Vector2d(-9,-35.5),Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(-9,-35),Math.toRadians(90));
+                .strafeTo(new Vector2d(-9, -34), velFast, accMedium);
+//                .splineToConstantHeading(new Vector2d(-9,-36),Math.toRadians(90))   // scored specimen X = 7.5 (preload), 3, -1, -5, now -9)
+//                .splineToConstantHeading(new Vector2d(-9,-35.5),Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(-9,-35),Math.toRadians(90));
 
 
 /** Park Home */
@@ -373,20 +383,20 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
 
 
 /** SKIPPING 4th SPECIMEN SCORE--preload specimen is addition specimen score  */
-//                        /**COLLECT 4rd SPEC AND SCORE */
-//                        new ParallelAction(
-//                                //autoOuttakeArmAxonAction(wallPickup_OuttakeArmAxonPos, 0),      //rotate outtake arm to ready position to grab specimen on wall
-//                                //autoouttakeExtensionAction(wallPickup_OuttakeExtensionPos),                 //extend out arm out (need to this to the place after preloadscore
-//                                //autoOuttakeSliderAction(wallPickup_SliderPos, 1),               //=0 outtake slider position to pickup specimen from wall
-//                                collectSpec4.build()                        //goto wall
-//                        ),
-//                        autoClawAction(clawClose_Pos, clawClose_pauseTimeSecond),       //close claw
-//                        new ParallelAction(
-//                                autoOuttakeSliderAction(scoring_OutakeSlider_ScoringPos, 1),        //=1240? move slider up
-//                                autoouttakeExtensionAction(scoring_OuttakeExtension_ScoringPos),          // = 0.85?  bring arm into robot
-//                                autoOuttakeArmAxonAction(scoring_OuttakeArmAxon_ScoringPos,0),  // = 0.90?  rotate to specimen score position
-//                                fourthScoreSpec.build()      //goto submersible pole; open claw; //1st move back from pole
-//                        ),
+                        /**COLLECT 4rd SPEC AND SCORE */
+                        new ParallelAction(
+                                //autoOuttakeArmAxonAction(wallPickup_OuttakeArmAxonPos, 0),      //rotate outtake arm to ready position to grab specimen on wall
+                                //autoouttakeExtensionAction(wallPickup_OuttakeExtensionPos),                 //extend out arm out (need to this to the place after preloadscore
+                                //autoOuttakeSliderAction(wallPickup_SliderPos, 1),               //=0 outtake slider position to pickup specimen from wall
+                                collectSpec4.build()                        //goto wall
+                        ),
+                        autoClawAction(clawClose_Pos, clawClose_pauseTimeSecond),       //close claw
+                        new ParallelAction(
+                                autoOuttakeSliderAction(scoring_OutakeSlider_ScoringPos, 1),        //=1240? move slider up
+                                autoouttakeExtensionAction(scoring_OuttakeExtension_ScoringPos),          // = 0.85?  bring arm into robot
+                                autoOuttakeArmAxonAction(scoring_OuttakeArmAxon_ScoringPos,0),  // = 0.90?  rotate to specimen score position
+                                fourthScoreSpec.build()      //goto submersible pole; open claw; //1st move back from pole
+                        ),
 
 
 
