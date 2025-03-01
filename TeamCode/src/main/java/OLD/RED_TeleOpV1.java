@@ -1,7 +1,8 @@
+package OLD;
+
 import android.graphics.Color;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
@@ -10,7 +11,6 @@ import com.pedropathing.util.Constants;
 import com.pedropathing.util.DashboardPoseTracker;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -63,7 +63,7 @@ import pedroPathing.constants.LConstants;
 
 
 //@Config    //need this to allow appearance in FtcDashboard Configuration to make adjust of variables
-//@TeleOp(group="Primary", name= "RED_TeleOpV1.2")
+//@TeleOp(group="Primary", name= "OLD.RED_TeleOpV1.2")
 public class RED_TeleOpV1 extends OpMode {
     private Telemetry telemetryA;
     boolean endGameRumble45secondsWarningOnce = true;

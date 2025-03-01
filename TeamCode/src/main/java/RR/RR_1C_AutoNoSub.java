@@ -42,7 +42,7 @@ import java.util.List;
 import Hardware.HardwareNoDriveTrainRobot;
 
 @Config
-@Autonomous(name = "RR_1C_Auto_ NoSub v1", group = "Auto")
+//@Autonomous(name = "RR_1C_Auto_ NoSub v1", group = "Auto")
 
 
     public class RR_1C_AutoNoSub extends LinearOpMode {

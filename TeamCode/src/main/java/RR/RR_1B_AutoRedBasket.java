@@ -44,9 +44,9 @@ import java.util.List;
 import Hardware.HardwareNoDriveTrainRobot;
 
 @Config
-@Autonomous(name = "BLUE Basket Submersible Auto", group = "Auto")
+@Autonomous(name = "RED Basket Submersible Auto", group = "Auto")
 
-public class RR_1B_AutoBlueBasket extends LinearOpMode {
+public class RR_1B_AutoRedBasket extends LinearOpMode {
     public static boolean readyToRun = false;
     public static String subPosition = "LimeLight";
     public static int test = 0;

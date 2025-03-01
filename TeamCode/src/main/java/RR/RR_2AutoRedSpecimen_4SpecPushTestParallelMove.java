@@ -17,6 +17,7 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
+// pedroPathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -40,8 +41,8 @@ import Hardware.HardwareNoDriveTrainRobot;
 
 
 @Config
-@Autonomous(name = "RR_3AutoRedSpecimen_Turn_5Spec v1.1", group = "Auto")
-public class RR_3AutoRedSpecimen_5SpecTurn extends LinearOpMode {
+@Autonomous(name = "4 Specimen Auto Parallel Move", group = "Auto")
+public class RR_2AutoRedSpecimen_4SpecPushTestParallelMove extends LinearOpMode {
 
 
     //TODO: setup initial position for all subsystems
@@ -102,9 +103,9 @@ public class RR_3AutoRedSpecimen_5SpecTurn extends LinearOpMode {
         double clawOpen_Pos = 0.0;  // change from Eduardo 2/17  0.7;       //open claw after score
         double clawOpen_pauseTimeSecond = 0.2;
 
-        double wallPickup_OuttakeArmAxonPos = 0.28;         //rotate outtake arm into robot to wall pickup position
+        double wallPickup_OuttakeArmAxonPos = 0.3;         //rotate outtake arm into robot to wall pickup position
         int wallPickup_SliderPos = 0;                       //outtake slider position to pickup specimen from wall
-        double wallPickup_OuttakeExtensionPos =  0.85;      //extend out arm out (need to place this to the place after preloadscore)
+        double wallPickup_OuttakeExtensionPos =  0.82;      //extend out arm out (need to place this to the place after preloadscore)
 
 
         /** START */
@@ -120,47 +121,24 @@ public class RR_3AutoRedSpecimen_5SpecTurn extends LinearOpMode {
                 .afterTime(0.5, autoOuttakeArmAxonAction(wallPickup_OuttakeArmAxonPos, 0))            //TODO: rotate outtake arm to ready position to grab specimen on wall
                 .afterTime(0.5, autoouttakeExtensionAction(wallPickup_OuttakeExtensionPos))                       //TODO: extend out arm out (need to this to the place after preloadscore
                 .afterTime(0.5, autoOuttakeSliderAction(wallPickup_SliderPos, 1))                      //TODO: ?outtake slider position to pickup specimen from wall
-                .afterTime(0.3, autoIntakeSliderAction(290,1,0))
-                .afterTime(0.5, autoIntakeSpiner(1, 0.5))
-//                .afterTime(1.3, autoIntakeServoAxonAction(0.97))
-//                .afterTime(3.1, autoIntakeServoAxonAction(0.87))
-//                .afterTime(4.0, autoIntakeServoAxonAction(0.97))
-//                .afterTime(5.5, autoIntakeServoAxonAction(0.87))
-             //   .afterTime(5.7, autoIntakeServoAxonAction(0.97))
-//                .afterTime(5, autoIntakeSliderAction(0,1,0))  //pull/keep Intake slider in before getting to wall
-//                .afterTime(10, autoIntakeSliderAction(0,1,0))  //pull/keep Intake slider in before getting to wall
+                .afterTime(5, autoIntakeSliderAction(0,1,0))  //pull/keep Intake slider in before getting to wall
+                .afterTime(10, autoIntakeSliderAction(0,1,0))  //pull/keep Intake slider in before getting to wall
 
                 /** 1st move back from submersible pole--BY SPLINE THEN STRAFE to push Sample 4,5,6 Home*/
-//                .splineToLinearHeading(new Pose2d(24,-32, Math.toRadians(60)),         //pushSample6Home, midway by Spline
-//                        Math.toRadians(60), velFast, accMedium)
-                .splineToLinearHeading(new Pose2d(20,-36, Math.toRadians(60)),         //pushSample6Home, midway by Spline
+                .splineToLinearHeading(new Pose2d(34,-45, Math.toRadians(-90)),  //spline to side before going to sample4
                         Math.toRadians(60), velFast, accMedium)
-                .strafeToLinearHeading(new Vector2d(22, -37), Math.toRadians(60), velFast, accMedium)
-                .stopAndAdd(autoIntakeServoAxonAction(0.97))
-                .waitSeconds(0.5)
-             //   .turnTo(Math.toRadians(-20))
-                .strafeToLinearHeading(new Vector2d(20, -50), Math.toRadians(-20), velFast, accMedium)
-                .stopAndAdd(autoIntakeServoAxonAction(0.87))
-                //      .waitSeconds(0.5)
+                .setReversed(true)
+                .strafeTo(new Vector2d(44,-7), velFast, accMedium)                          //strafe from midway to Sample4
 
-                .strafeToLinearHeading(new Vector2d(28, -35), Math.toRadians(50), velFast, accMedium)
-                .stopAndAdd(autoIntakeServoAxonAction(0.97))
-                .waitSeconds(0.35)
-//                .turnTo(Math.toRadians(-20))
-                .strafeToLinearHeading(new Vector2d(28, -50), Math.toRadians(-20), velFast, accMedium)
-                .stopAndAdd(autoIntakeServoAxonAction(0.87))
-                //      .waitSeconds(0.5)
+                .strafeTo(new Vector2d(48, -50), velFast, accFast)      //pushSample4Home
 
+                .setReversed(true)
+                .strafeTo(new Vector2d(55, -8), velFast, accFast)       //toward Sample5
+                .strafeTo(new Vector2d(56, -50), velFast, accMedium)    //pushSample5Home
 
-                .strafeToLinearHeading(new Vector2d(35, -32), Math.toRadians(45), velFast, accMedium)
-                .stopAndAdd(autoIntakeServoAxonAction(0.97))
-                .waitSeconds(0.35)
-             //   .turnTo(Math.toRadians(-30))
-                .strafeToLinearHeading(new Vector2d(35, -50), Math.toRadians(-20), velFast, accMedium)
-                //      .waitSeconds(0.5)
 //                .setReversed(true)
 //                .strafeTo(new Vector2d(62, -8), velFast, accMedium)     //toward Sample6
-                .waitSeconds(10)
+
                 /** push sample 6 home and goto Wall */
                 .setReversed(false)
 //                .splineToLinearHeading(new Pose2d(62,-34, Math.toRadians(-90)),         //pushSample6Home, midway by Spline
@@ -274,6 +252,7 @@ public class RR_3AutoRedSpecimen_5SpecTurn extends LinearOpMode {
         TrajectoryActionBuilder endAtHome = thirdScoreSpec.endTrajectory().fresh()
         //TrajectoryActionBuilder endAtHome = fourthScoreSpec.endTrajectory().fresh()
                 .stopAndAdd(new AutoClawAction(clawOpen_Pos,clawOpen_pauseTimeSecond))        //open claw
+              //  .afterTime(0.5, autoOuttakeSliderAction(1340, 1))
                 .afterTime(1, autoOuttakeArmAxonAction(wallPickup_OuttakeArmAxonPos, 0))    //rotate outtake arm to ready position to grab specimen on wall
                 .afterTime(1, autoouttakeExtensionAction(wallPickup_OuttakeExtensionPos))        //extend out arm out to grab specimen on wall
                 .afterTime(1, autoOuttakeSliderAction(wallPickup_SliderPos, 1))           //=0 outtake slider position to pickup specimen from wall
@@ -368,7 +347,7 @@ public class RR_3AutoRedSpecimen_5SpecTurn extends LinearOpMode {
                                 //autoOuttakeSliderAction(wallPickup_SliderPos, 1),               //=0 outtake slider position to pickup specimen from wall
                                 collectSpec2.build()  //open claw; move back from submersible; delay rotate arm in, extend to wall, lower slider; THEN goto wall
                         ),
-                        autoClawAction(1, clawClose_pauseTimeSecond),                     //close claw
+                        autoClawAction(clawClose_Pos, clawClose_pauseTimeSecond),                     //close claw
                         new ParallelAction(
                                 autoOuttakeSliderAction(scoring_OutakeSlider_ScoringPos, 1),        //move slider up
                                 autoouttakeExtensionAction(scoring_OuttakeExtension_ScoringPos),          //bring arm into robot to scoring position
