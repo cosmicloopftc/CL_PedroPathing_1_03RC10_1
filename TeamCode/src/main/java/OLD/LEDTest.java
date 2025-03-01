@@ -1,4 +1,4 @@
-/*
+package OLD;/*
         Copyright (c) 2021-24 Alan Smith
 
         All rights reserved.
@@ -34,9 +34,7 @@
 import android.graphics.Color;
 
 import com.qualcomm.hardware.sparkfun.SparkFunLEDStick;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 /*

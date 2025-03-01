@@ -41,8 +41,8 @@ import Hardware.HardwareNoDriveTrainRobot;
 
 
 @Config
-@Autonomous(name = "RR_2AutoRedSpecimen_Push_ParallelMove v1.1", group = "Auto")
-public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
+@Autonomous(name = "4 Specimen Auto Parallel Move", group = "Auto")
+public class RR_2AutoRedSpecimen_4SpecPushTestParallelMove extends LinearOpMode {
 
 
     //TODO: setup initial position for all subsystems
@@ -103,7 +103,7 @@ public class RR_2AutoRedSpecimen_PushTestParallelMove extends LinearOpMode {
         double clawOpen_Pos = 0.0;  // change from Eduardo 2/17  0.7;       //open claw after score
         double clawOpen_pauseTimeSecond = 0.2;
 
-        double wallPickup_OuttakeArmAxonPos = 0.29;         //rotate outtake arm into robot to wall pickup position
+        double wallPickup_OuttakeArmAxonPos = 0.3;         //rotate outtake arm into robot to wall pickup position
         int wallPickup_SliderPos = 0;                       //outtake slider position to pickup specimen from wall
         double wallPickup_OuttakeExtensionPos =  0.82;      //extend out arm out (need to place this to the place after preloadscore)
 

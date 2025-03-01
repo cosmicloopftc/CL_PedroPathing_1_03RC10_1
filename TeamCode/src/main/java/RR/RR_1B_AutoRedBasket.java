@@ -4,9 +4,10 @@ package RR;
  *  ED: updated 2/21/2025 morning
  *  2/22/2025Sat.  Dominic: Auto BLUE with Submersible LimeLight and light sensor to spit out wrong sample pickup
  *                  separate class for the other color case and for Alliance without Auto
+ *                  TODO: NEED TO ADJUST BASKET SLIDER POSITION due to slider restrung
  *
- *  3/9/2025:  night before state
- *              TODO: NEED TO CHECK FILE NAME both red and blue have RR_1B
+ * 3/9/2025:  night before state
+ *  *              TODO: NEED TO CHECK FILE NAME both red and blue have RR_1B
  * */
 
 import androidx.annotation.NonNull;
@@ -44,9 +45,9 @@ import java.util.List;
 import Hardware.HardwareNoDriveTrainRobot;
 
 @Config
-@Autonomous(name = "BLUE Basket Submersible Auto", group = "Auto")
+@Autonomous(name = "RED Basket Submersible Auto", group = "Auto")
 
-public class RR_1B_AutoBlueBasket extends LinearOpMode {
+public class RR_1B_AutoRedBasket extends LinearOpMode {
     public static boolean readyToRun = false;
     public static String subPosition = "LimeLight";
     public static int test = 0;
@@ -72,7 +73,7 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
         AutoOuttakeSliderAction autoOuttakeSliderAction = null;
         autoRobot.init(hardwareMap);   //for all hardware except drivetrain.  note hardwareMap is default and part of FTC Robot Controller HardwareMap class
 
-        String AllianceBasketOrSpecimen = "1B_AUTO_BLUEBasket_Submersible";
+        String AllianceBasketOrSpecimen = "1B_AUTO_REDBasket_Submersible";
         Pose2d beginPose = new Pose2d(-32, -62, Math.toRadians(0));     //TODO: would overide this for each case
 
         int debugLevel = 499;
@@ -144,16 +145,16 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                 .strafeToSplineHeading(new Vector2d(-57.5, -52.5), Math.toRadians(45));
 
         TrajectoryActionBuilder submersible = turnToBasket3.endTrajectory().fresh()
-              //  .setTangent(45)
+                //  .setTangent(45)
                 .splineToSplineHeading(new Pose2d(-23.25, 0, 0), Math.toRadians(35), velFast, accFast);
 
         TrajectoryActionBuilder turnToBasket2 = submersible.endTrajectory().fresh()
-              //  .setTangent(45)
+                //  .setTangent(45)
                 .strafeToConstantHeading(new Vector2d(-25, 0), velFast, accFast)
                 .strafeToSplineHeading(new Vector2d(-59.5, -53), Math.toRadians(45.5), velFast, accFast);
 
         TrajectoryActionBuilder submersiblePark = turnToBasket3.endTrajectory().fresh()
-               // .setTangent(45)
+                // .setTangent(45)
                 .strafeToLinearHeading(new Vector2d(-35, -15), Math.toRadians(180), velPark, accPark1)
                 .strafeToLinearHeading(new Vector2d(-22, -15), Math.toRadians(180), velPark, accPark2);  // prev y was -15
 
@@ -771,11 +772,10 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
             double green = colors.green;
             if (red > 0.02 && red > green && red > blue) {
                 sampleColor = "RED";
-                autoRobot.Intake.intakeLeftWheel.setPower(1);       //TODO: split out RED sample
-                autoRobot.Intake.intakeRightWheel.setPower(-1);
-
             } else if (blue > 0.02 && blue > green && blue > red) {
                 sampleColor = "BLUE";
+                autoRobot.Intake.intakeLeftWheel.setPower(1);   //TODO: Spit out when blue
+                autoRobot.Intake.intakeRightWheel.setPower(-1);
 
             } else if (green > 0.02 && green > red && green > blue) {
                 sampleColor = "YELLOW";

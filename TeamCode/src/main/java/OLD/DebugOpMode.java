@@ -1,16 +1,12 @@
+package OLD;
+
 import static Hardware.HardwareDrivetrain.leftFront;
 import static Hardware.HardwareDrivetrain.leftRear;
 import static Hardware.HardwareDrivetrain.rightFront;
 import static Hardware.HardwareDrivetrain.rightRear;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -23,8 +19,8 @@ import Hardware.HardwareNoDriveTrainRobot;
  *
  * */
 
-@Config
-@TeleOp(group="Secondary", name= "DebugOpMode Diagnostic 1.1")
+//@Config
+//@TeleOp(group="Secondary", name= "OLD.DebugOpMode Diagnostic 1.1")
 
 
 public class DebugOpMode extends OpMode {

@@ -107,10 +107,10 @@ public class HardwareIntake {
 
     //method for the extended position of the intake slides
     public void intakeSlideOUT() {
-        intakeSlideSetPositionPower(310,0.8); //Far out position (within extension limit)
+        intakeSlideSetPositionPower(350,0.8); //Far out position (within extension limit)
     }
     public void intakeSlideMID() {
-        intakeSlideSetPositionPower(200,0.8); //Middle position
+        intakeSlideSetPositionPower(230,0.8); //Middle position
     }
 
     public void intakeDOWN(){
