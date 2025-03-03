@@ -687,6 +687,7 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                 double blue = colors.blue;
                 double red = colors.red;
                 double green = colors.green;
+
                 if (red > 0.02 && red > green && red > blue){
                     sampleColor = "RED";
                     autoRobot.Intake.intakeLeftWheel.setPower(1);
