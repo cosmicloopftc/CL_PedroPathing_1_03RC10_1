@@ -45,9 +45,8 @@ import Hardware.HardwareNoDriveTrainRobot;
 @Config
 @Autonomous(name = "RR_1B_AUTO_Blue Basket_Submer v1.1", group = "Auto")
 
-public class RR_1B_AutoBlueBasket extends LinearOpMode {
+public class Throw_Away_DO_NOT_USE extends LinearOpMode {
     public static boolean readyToRun = false;
-    public static String subPosition = "LimeLight";
     public static int test = 0;
     //TODO: setup initial position for all subsystems
     //    public static double autoEnd_SliderMotorPosition,
@@ -156,22 +155,13 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
             autoRobot.Outtake.outtakeArmAxon.setPosition(0.28);
             autoRobot.Outtake.closeClaw();
             autoRobot.Intake.intakeINSIDEBOT();
-            if(gamepad1.dpad_left){
-                subPosition = "Left";
-            }else if(gamepad1.dpad_up){
-                subPosition = "Center";
-            }else if(gamepad1.dpad_right){
-                subPosition = "Right";
-            }else{
-                subPosition = "LimeLight";
-            }
 
             telemetryA.addLine("Initialized");
             telemetryA.addData("Alliance Color/Mode: ", AllianceBasketOrSpecimen);
             telemetryA.addData("Starting X = ", beginPose.position.x);
             telemetryA.addData("Starting Y = ", beginPose.position.y);
             telemetryA.addData("Starting Heading (Degrees) = ", Math.toDegrees(beginPose.heading.toDouble()));
-            telemetry.addData("Position", subPosition);
+            telemetry.addData("Test", test);
             telemetry.update();
 //            LLResult result = limelight.getLatestResult();
 //            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
@@ -216,18 +206,17 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                                 autoIntakeSpiner(-1, 0.1),
                                 new ParallelAction(
                                         autoOuttakeSliderAction(0, 1),
-                                        autoIntakeSliderAction(145, sliderPower, 0),
                                         //move to first sample
                                         grabPose.build()
                                 ),
-                                autoIntakeSliderAction(270, sliderPower-0.3, 0),
+                                autoIntakeSliderAction(300, sliderPower, 0),
                                 autoIntakeServoAxonAction(intakeAxonPosition, 0),
                                 /*NEXT STEP*/
                                 autoIntakeSliderAction(1, sliderPower, 0),
 
-                                autoIntakeSpiner(0, 0.15),
+                                autoIntakeSpiner(0, 0.3),
                                 autoOuttakeArmAxonAction(grabPosition, 0.1),
-                                autoClawAction(0.3, 0.1),
+                                autoClawAction(0.3, 0.25),
                                 new ParallelAction(
                                         autoOuttakeSliderHighBasketAction(),
                                         autoIntakeSpiner(1, 0),
@@ -237,7 +226,7 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                                 ),
                                 //
                                 /** Sample 2*/
-                                autoIntakeSpiner(0, 0.05),
+                                autoIntakeSpiner(0, 0.1),
                                 autoClawAction(0, 0.1),
                                 autoouttakeExtensionAction(1, 0),
                                 autoOuttakeArmAxonAction(readyPosition, 0),
@@ -247,18 +236,19 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                                 //move to first sample
                                 new ParallelAction(
                                         autoOuttakeSliderAction(0, 1),
-                                        autoIntakeSliderAction(165, sliderPower, 0),
                                         //move to first sample
                                         grabPose2.build()
                                 ),
-                                autoIntakeSliderAction(275, sliderPower-0.3, 0),
+                                autoIntakeSliderAction(320, sliderPower, 0),
                                 autoIntakeServoAxonAction(intakeAxonPosition, 0),
                                 /*NEXT STEP*/
                                 autoIntakeSliderAction(1, sliderPower, 0),
 
-                                autoIntakeSpiner(0, 0.15),
-                                autoOuttakeArmAxonAction(grabPosition, 0.1),
-                                autoClawAction(0.3, 0.1),
+                                autoIntakeSpiner(0, 0.3),
+                                autoOuttakeArmAxonAction(grabPosition, 0),
+                                autoIntakeSpiner(0, 0.1),
+                                autoClawAction(0.3, 0.25),
+
                                 new ParallelAction(
                                         autoOuttakeSliderHighBasketAction(),
                                         autoIntakeSpiner(1, 0),
@@ -277,20 +267,20 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                                 //move to first sample
                                 new ParallelAction(
                                         autoOuttakeSliderAction(0, 1),
-                                        autoIntakeSliderAction(170, sliderPower, 0),
                                         //move to first sample
                                         grabPose3.build()
                                 ),
-                                autoIntakeSliderAction(225, sliderPower-0.35, 0),
+                                autoIntakeSliderAction(232, sliderPower-0.05, 0),
                                 move.build(),
                                 autoIntakeSpiner(0, 0.1),
                                 autoIntakeServoAxonAction(intakeAxonPosition, 0),
                                 /*NEXT STEP*/
                                 autoIntakeSliderAction(1, sliderPower, 0),
 
-                                autoIntakeSpiner(0, 0.15),
+                                autoIntakeSpiner(0, 0.3),
+                                autoIntakeSpiner(0, 0),
                                 autoOuttakeArmAxonAction(grabPosition, 0.1),
-                                autoClawAction(0.3, 0.1),
+                                autoClawAction(0.3, 0.25),
                                 new ParallelAction(
                                         autoOuttakeSliderHighBasketAction(),
                                         autoIntakeSpiner(1, 0),
@@ -298,7 +288,7 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                                         autoOuttakeArmAxonAction(0.77, 0),
                                         autoouttakeExtensionAction(0.8, 0.85)
                                 ),
-                                autoIntakeSpiner(0, 0.1),
+                                autoIntakeSpiner(0, 0.15),
                                 autoClawAction(0, 0.15),
 
                                 //End of V1
@@ -318,96 +308,81 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                         )
                 )
         );
+        readyToRun = false;
+        telemetry.setMsTransmissionInterval(10); // This sets how often we ask Limelight for data (100 times per second)
+        limelight.pipelineSwitch(1);
+        limelight.start();
+        LLResult result = limelight.getLatestResult();
         int turnAmount = 1;
-        if(subPosition == "LimeLight") {
-            readyToRun = false;
-            telemetry.setMsTransmissionInterval(10); // This sets how often we ask Limelight for data (100 times per second)
-            limelight.pipelineSwitch(1);
-            limelight.start();
-            LLResult result = limelight.getLatestResult();
-
-            if (result != null) {
-                List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-                List<Double> left = new ArrayList<>();
-                List<Double> right = new ArrayList<>();
-                List<Double> center = new ArrayList<>();
-                for (LLResultTypes.ColorResult cr : colorResults) {
-                    telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
-                    if (cr.getTargetXDegrees() < -5) {
-                        left.add(cr.getTargetXDegrees());
-                    } else if (cr.getTargetXDegrees() < 5) {
-                        center.add(cr.getTargetXDegrees());
-                    } else {
-                        right.add(cr.getTargetXDegrees());
-                    }
+        if(result != null) {
+            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+            List<Double> left = new ArrayList<>();
+            List<Double> right = new ArrayList<>();
+            List<Double> center = new ArrayList<>();
+            for (LLResultTypes.ColorResult cr : colorResults) {
+                telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
+                if (cr.getTargetXDegrees() < -5) {
+                    left.add(cr.getTargetXDegrees());
+                } else if (cr.getTargetXDegrees() < 5) {
+                    center.add(cr.getTargetXDegrees());
+                } else {
+                    right.add(cr.getTargetXDegrees());
                 }
-                telemetry.update();
-                limelight.stop();
-                if (left.size() > right.size() && center.size() < left.size()) {
-                    turnAmount = 345;
-                } else if (right.size() > left.size() && center.size() < right.size()) {
-                    turnAmount = 15;
-                } else if (center.size() > left.size() && center.size() > right.size()) {
-                    turnAmount = 1;
-                }
-            } else {
-                telemetry.addData("Null", "Null");
             }
             telemetry.update();
-        }else{
-            if(subPosition == "Left"){
+            limelight.stop();
+            if (left.size() > right.size() && center.size() < left.size()) {
                 turnAmount = 345;
-            }else if(subPosition == "Right"){
+            } else if (right.size() > left.size() && center.size() < right.size()) {
                 turnAmount = 15;
-            }else if(subPosition == "Center"){
-                turnAmount = 0;
+            } else if (center.size() > left.size() && center.size() > right.size()) {
+                turnAmount = 1;
             }
+        } else {
+            telemetry.addData("Null", "Null");
         }
-            TrajectoryActionBuilder submerisbleTurn = submersible.endTrajectory().fresh()
+        telemetry.update();
+        TrajectoryActionBuilder submerisbleTurn = submersible.endTrajectory().fresh()
 //                .lineToX(-26)
-                    .turnTo(Math.toRadians(turnAmount));
-
+                .turnTo(Math.toRadians(turnAmount));
         Actions.runBlocking(
-            new ParallelAction(
-                AutoColorSensor(10),
-                autoResetBothSliders(10, readyToRun),
-                new SequentialAction(
-                    new ParallelAction(
-                        submerisbleTurn.build(),
+                new ParallelAction(
+                        AutoColorSensor(10),
+                        autoResetBothSliders(10, readyToRun),
                         new SequentialAction(
-                                autoIntakeSpiner(-1, 0),
-                                autoIntakeServoAxonAction(intakeDown, 0.25),
-                                autoIntakeSliderAction(340, 0.5, 0)
+                                new ParallelAction(
+                                        submerisbleTurn.build(),
+                                        new SequentialAction(
+                                                autoIntakeSpiner(-1, 0),
+                                                autoIntakeServoAxonAction(intakeDown, 0.25),
+                                                autoIntakeSliderAction(340, .2, 0)
+                                        )
+                                ),
+                                //Move to basket
+                                autoIntakeSliderAction(1, 0.4, 0),
+                                autoIntakeServoAxonAction(intakeAxonPosition, 0),
+                                new ParallelAction(
+                                        autoIntakeSpiner(0, 0),
+                                        turnToBasket2.build(),
+                                        new SequentialAction(
+                                                autoIntakeSpiner(0, 0.5),
+                                                autoOuttakeArmAxonAction(grabPosition, 0.1),
+                                                autoClawAction(0.3, 0.25),
+                                                autoOuttakeSliderHighBasketAction(),
+                                                autoOuttakeArmAxonAction(0.75, 0),
+                                                autoouttakeExtensionAction(0.8, 0.25)
+                                        )
+                                ),
+
+                                //Final
+                                autoClawAction(0, 0.15),
+                                autoouttakeExtensionAction(1, 0),
+                                autoOuttakeSliderAction(0, 1),
+                                autoOuttakeArmAxonAction(readyPosition, 10)
+
                         )
-                    )
-                )
-            )
-        );
-        Actions.runBlocking(
-            new SequentialAction(
-            //Move to basket
-            autoIntakeSliderAction(1, 0.4, 0),
-            autoIntakeServoAxonAction(intakeAxonPosition, 0),
-            new ParallelAction(
-                autoIntakeSpiner(0, 0),
-                turnToBasket2.build(),
-                new SequentialAction(
-                        autoIntakeSpiner(0, 0.5),
-                        autoOuttakeArmAxonAction(grabPosition, 0.1),
-                        autoClawAction(0.3, 0.25),
-                        autoOuttakeSliderHighBasketAction(),
-                        autoOuttakeArmAxonAction(0.75, 0),
-                        autoouttakeExtensionAction(0.8, 0.25)
-                )
-            ),
-            //Final
-            autoClawAction(0, 0.15),
-            autoouttakeExtensionAction(1, 0),
-            autoOuttakeSliderAction(0, 1),
-            autoOuttakeArmAxonAction(readyPosition, 10)
 
-        )
-
+                )
         );
 
 //}
@@ -547,6 +522,11 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                 autoRobot.Outtake.outtakeExtension.setPosition(desirePosition);
                 initialized = true;
             }
+            if(desirePosition <= 1 && (Math.abs((autoRobot.Outtake.outtakeExtension.getPosition() - desirePosition)) < 20)){
+                readyToRun = true;
+            }else{
+                readyToRun = false;
+            }
             return timer.seconds() < pauseTime;
         }
     }
@@ -610,7 +590,7 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
             }
             double positionIntakeSlide = autoRobot.Intake.intakeSlides.getCurrentPosition();
             packet.put("Intake slider position", positionIntakeSlide);
-            if(desirePosition <= 1 && !(Math.abs((positionIntakeSlide - desirePosition)) > 20)){
+            if(desirePosition <= 1 && (Math.abs((positionIntakeSlide - desirePosition)) < 20)){
                 readyToRun = true;
             }else{
                 readyToRun = false;
@@ -762,8 +742,6 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
                 sampleColor = "YELLOW";
                 //autoRobot.Intake.intakeLeftWheel.setPower(-1);
                 //autoRobot.Intake.intakeRightWheel.setPower(1);
-            } else{
-                sampleColor = "NONE";
             }
             test++;
             telemetry.addData("Test:", test);
