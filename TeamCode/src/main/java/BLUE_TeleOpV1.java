@@ -781,11 +781,12 @@ public class BLUE_TeleOpV1 extends OpMode {
         }
         // Pull slides down to hang
         else if(gamepad1.x) {
-            robot.Outtake.outtakeArmAxon.setPosition(0.43);
-            robot.Outtake.extendIN();
-            robot.Outtake.openClaw();
-            robot.Outtake.leftSlideSetPositionPower(1400, 1);
-            robot.Outtake.rightSlideSetPositionPower(1400, 1);
+            robot.Hang.hang();
+//            robot.Outtake.outtakeArmAxon.setPosition(0.43);
+//            robot.Outtake.extendIN();
+//            robot.Outtake.openClaw();
+//            robot.Outtake.leftSlideSetPositionPower(1400, 1);
+//            robot.Outtake.rightSlideSetPositionPower(1400, 1);
         }
 
 
@@ -902,6 +903,7 @@ public class BLUE_TeleOpV1 extends OpMode {
 
         /**************  TELEMETRY MAY SLOW DOWN LOOP if many I2C calls  ************************/
         telemetryA.addData("Runtime (seconds) = ", "%.1f", getRuntime());
+        telemetryA.addData("Hang motor position: ", robot.Hang.hangMotor.getCurrentPosition());
         //telemetryA.addData("Robot Driving Orientation = ", drivingOrientation);
       //  telemetryA.addData("State = ", state);
         //telemetryA.addData("Time in State (seconds) = ", 0);

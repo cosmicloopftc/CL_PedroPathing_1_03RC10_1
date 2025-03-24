@@ -62,7 +62,7 @@ public class HardwareNoDriveTrainRobot {
 //    boolean drivetrainConnected = true;
     boolean intakeConnected = true;
     boolean outtakeConnected = true;
-    boolean hangConnected = false;
+    boolean hangConnected = true;
     boolean sensorConnected = true;
     boolean gamePadLEDConnected = false;
     boolean LEDConnected = true;
