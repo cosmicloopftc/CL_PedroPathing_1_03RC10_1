@@ -3,6 +3,7 @@ package com.example.meepmeeptesting;
 import com.acmerobotics.roadrunner.AccelConstraint;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
@@ -40,8 +41,10 @@ public class MeepMeepTesting_5Spec_Push {
 
                 /** 1st move back from submersible pole--BY SPLINE THEN STRAFE to push Sample 4,5,6 Home*/
                         .setReversed(false)
-                .splineToLinearHeading(new Pose2d(40,-37, Math.toRadians(-90)),         //pushSample6Home, midway by Spline
-                        Math.toRadians(60), velMedium, accMedium)  // TODO 34
+
+                .strafeToLinearHeading(new Vector2d(40, -32), Math.toRadians(-90), velMedium, accMedium)
+//                .splineToLinearHeading(new Pose2d(43,-29, Math.toRadians(-90)),         //pushSample6Home, midway by Spline
+//                        Math.toRadians(60), velMedium, accMedium)  // TODO 37
                 //      .waitSeconds(0.5)
 
                 //       .setReversed(true)
@@ -164,9 +167,19 @@ public class MeepMeepTesting_5Spec_Push {
 
 
 /** Park Home */
-                .strafeToLinearHeading(new Vector2d(40,-63.5),
-                        Math.toRadians(-45), velFast, accFast)  //1st move back from submersible pole
+                .strafeTo(new Vector2d(38, -64.5), velFast, accMedium)
+//                .strafeToLinearHeading(new Vector2d(40,-63.5),
+//                        Math.toRadians(-45), velFast, accFast)  //1st move back from submersible pole
                 // starting pose Y = -63, so need to go back more to wall, so -63.5?  TODO: need to reset Y as "wall squaring method"
+
+
+
+
+                .setReversed(true)                                                              //need this as robot is moving backward
+            //    .splineTo(new Vector2d(-47.5, -60.5), Math.toRadians(-180), velFast, accFast)
+
+                .strafeToLinearHeading(new Vector2d(-47.5, -60.5), Math.toRadians(0), velFast, accFast)
+
 
                 .build());
 
