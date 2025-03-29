@@ -3,11 +3,13 @@ package Hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 //modified from FTC Thunderbolts (Sacramento, CA) mentor's program structure
 
 public class HardwareHang {
     public DcMotor hangMotor = null;
+    public Servo hangServo = null;
 
     /*Constructor*/
     public HardwareHang() {
@@ -24,6 +26,8 @@ public class HardwareHang {
         hangMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hangMotor.setDirection(DcMotor.Direction.REVERSE); // Reverse if 0 is at ready to hang position, forward if 0 inside robot
         hangMotor.setPower(0);
+
+        hangServo = hardwareMap.get(Servo.class, "hangServo"); // 0 is hooks in, 0.09 is hooks out
 
 
     }
@@ -46,6 +50,6 @@ public class HardwareHang {
         hangMotor.setPower(power);
     }
     public void hang() {
-        setPowerPosition(2500, 1); //Make sure 0 is when hooks all the way extended back
+        setPowerPosition(3000, 1); //Make sure 0 is when hooks all the way extended back
     }
 }
