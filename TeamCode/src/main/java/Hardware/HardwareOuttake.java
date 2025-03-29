@@ -30,14 +30,14 @@ public class HardwareOuttake {
         //map and setup mode of slide motors
         outtakeLeftSlide = hardwareMap.get(DcMotorEx.class, "outtakeLeftSlide");
         outtakeLeftSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        outtakeLeftSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        //outtakeLeftSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         outtakeLeftSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         outtakeLeftSlide.setDirection(DcMotorEx.Direction.FORWARD); //It is forward on robot
         outtakeLeftSlide.setPower(0);
 
         outtakeRightSlide = hardwareMap.get(DcMotorEx.class, "outtakeRightSlide");
         outtakeRightSlide.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        outtakeRightSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        //outtakeRightSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         outtakeRightSlide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         outtakeRightSlide.setDirection(DcMotorEx.Direction.REVERSE); //It is reversed on robot
         outtakeRightSlide.setPower(0);
@@ -87,7 +87,7 @@ public class HardwareOuttake {
         claw.setPosition(0.30);  // by Eduardo 2/17/25 (1); // all set for new bot
     }
     public void extendIN(){
-        outtakeExtension.setPosition(1);
+        outtakeExtension.setPosition(0.98);
     }
     public void extendOUT(){
         outtakeExtension.setPosition(0.78); //All the way out is 0.75, 0.85 is within the robot

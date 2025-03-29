@@ -100,8 +100,8 @@ public class RR_1B_AutoBlueBasket extends LinearOpMode {
 
 
         double readyPosition = 0.43;
-        double grabPosition = 0.342;
-        double intakeAxonPosition = 0.635;
+        double grabPosition = 0.29;
+        double intakeAxonPosition = 0.64;
         double sweeperIn = 0.09;
         double sweeperOUT = 0.5;
         double intakeDown = 0.96;

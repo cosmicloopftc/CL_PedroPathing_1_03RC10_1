@@ -102,18 +102,18 @@ public class HardwareIntake {
 
     //method for the retracted position of the intake slides
     public void intakeSlideIN() {
-        intakeSlideSetPositionPower(0,0.8); //Inside robot
+        intakeSlideSetPositionPower(0,1); //Inside robot
     }
 
     //method for the extended position of the intake slides
     public void intakeSlideOUT() {
-        intakeSlideSetPositionPower(370,0.8); //Far out position (within extension limit)
+        intakeSlideSetPositionPower(1000,1); //Far out position (within extension limit)
     }
     public void intakeSlideMID() {
-        intakeSlideSetPositionPower(230,0.8); //Middle position
+        intakeSlideSetPositionPower(600,1); //Middle position
     }
     public void intakeSlideLOW() {
-        intakeSlideSetPositionPower(50, 0.8);
+        intakeSlideSetPositionPower(130, 0.4);
     }
 
     public void intakeDOWN(){
@@ -123,10 +123,10 @@ public class HardwareIntake {
         intakeServoAxon.setPosition(0.87); //Position when down, but not intaking
     }
     public void intakeINSIDEBOT(){
-        //intakeServoAxon.setPosition(0.52); //Position when grabbing specimen off wall
+        intakeServoAxon.setPosition(0.63); //Position when grabbing specimen off wall
     }
     public void intakeTRANSFER(){
-        intakeServoAxon.setPosition(0.635); //Position where sample gets grabbed out of intake
+        intakeServoAxon.setPosition(0.65); //Position where sample gets grabbed out of intake
     }
     public double getIntakeServoAxonPosition(){
         // get the voltage of our analog line
