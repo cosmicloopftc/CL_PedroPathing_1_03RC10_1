@@ -65,15 +65,15 @@ import Diagnostic.Datalogger;
  1/3/2025:   Update new PedroPath 1.0.3 teleOp movement
  2/19/2025:  add AUTOconstant of data transfer from end of AUTO to staring pose
  2/20/2025:  add Datalogger Class to Diagnostic folder and incorporate ConceptDataLogger BLUE_TeleOpV1 Class
-                For instructions, see the tutorial at the FTC Wiki:  https://github.com/FIRST-Tech-Challenge/FtcRobotController/wiki/Datalogging
-                Credit to @Windwoes (https://github.com/Windwoes).
-             To access the file: connect to Drive Hub and go to : /sdcard/FIRST/java/src/Datalogs, look for the file
-                Right-click on a log file, and choose "Download". During the download dialog,
-                navigate to your target folder on the laptop, and change the file extension from .txt to .csv.
-                This change allows the file to be automatically recognized and imported by spreadsheet programs.
-             To graph data: In the spreadsheet, select columns to graphs: Elapsed Time and other data columns.
-                select Insert Chart, basic 2-D line style graph option
-             TODO: writeDatalog()--need to check if this will slow down run loop--line 341 and line 814
+ For instructions, see the tutorial at the FTC Wiki:  https://github.com/FIRST-Tech-Challenge/FtcRobotController/wiki/Datalogging
+ Credit to @Windwoes (https://github.com/Windwoes).
+ To access the file: connect to Drive Hub and go to : /sdcard/FIRST/java/src/Datalogs, look for the file
+ Right-click on a log file, and choose "Download". During the download dialog,
+ navigate to your target folder on the laptop, and change the file extension from .txt to .csv.
+ This change allows the file to be automatically recognized and imported by spreadsheet programs.
+ To graph data: In the spreadsheet, select columns to graphs: Elapsed Time and other data columns.
+ select Insert Chart, basic 2-D line style graph option
+ TODO: writeDatalog()--need to check if this will slow down run loop--line 341 and line 814
  */
 
 
@@ -354,7 +354,7 @@ public class BLUE_TeleOpV1 extends OpMode {
         //      angular velocity is <0.02 (1 degree = 0.175 radian), then reset slider to ZERO position, need to test and adjust
         if ((intakeSliderPresentPosition < 20) && (Math.abs(intakeSliderAngularVelocity)<1)){
             robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-           //robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER); //TODO: do we need this line?
+            //robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER); //TODO: do we need this line?
             intakeOptionInitLoop = "reset Intake Slider to zero";
         }
 
@@ -474,7 +474,7 @@ public class BLUE_TeleOpV1 extends OpMode {
         if ((outtakeSlider_Right_PresentPosition < 10) &&
                 (Math.abs(outtakeSlider_Right_AngularVelocity)<1)
                 && (isGP2rightYupdown || isGP2leftYupdown)){
-                //!((Math.abs(gamepad2.right_stick_y) > 0.0)) || (Math.abs(gamepad2.left_stick_y) > 0.0)){
+            //!((Math.abs(gamepad2.right_stick_y) > 0.0)) || (Math.abs(gamepad2.left_stick_y) > 0.0)){
             //){
             robot.Outtake.outtakeLeftSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             robot.Outtake.outtakeRightSlide.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -484,11 +484,11 @@ public class BLUE_TeleOpV1 extends OpMode {
         }
         //TODO: if right outtake slider is <10 position and
         //      angular velocity is <1 tick/second (1 degree = 0.175 radian), then reset slider to ZERO position, need to test and adjust
-        if ((intakeSliderPresentPosition < 5) && (Math.abs(intakeSliderAngularVelocity)<1)){
-            robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-            //robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER); //TODO: do we need this line?
-            //intakeOptionInitLoop = "reset Intake Slider to zero";
-        }
+//        if ((intakeSliderPresentPosition < 1) && (Math.abs(intakeSliderAngularVelocity)<1)){
+//            robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//            //robot.Intake.intakeSlides.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER); //TODO: do we need this line?
+//            //intakeOptionInitLoop = "reset Intake Slider to zero";
+//        }
 
 
 
@@ -501,6 +501,15 @@ public class BLUE_TeleOpV1 extends OpMode {
                     robot.Intake.intakeTRANSFER();
                     robot.Intake.sweeperIN();
                     outtakeOption = "";
+                }
+                if (gamepad1.y) {
+                    outtakeOption = "hang";
+                }
+                if (outtakeOption.equals("hang")) {
+                    robot.Outtake.closeClaw();
+                    robot.Intake.intakeUP();
+                    robot.Outtake.outtakeArmAxon.setPosition(0.2);
+                    robot.Outtake.extendOUT();
                 }
 //                if(gamepad2.dpad_down){
 //                    outtakeOption = "wallIntakeBack";
@@ -639,7 +648,14 @@ public class BLUE_TeleOpV1 extends OpMode {
 //                    robot.Outtake.groundPositionClose();
 //                }
                 if(robot.Outtake.claw.getPosition() > 0.27 && gamepad2.y) { //Make sure that claw is in closed position
+                    //robot.Outtake.extendIN();
                     outtakeOption = "highBasket";
+                    //robot.Outtake.closeClaw();
+                    state = State.OUTTAKE;
+                }
+                if(robot.Outtake.claw.getPosition() > 0.27 && gamepad2.dpad_left) { //Make sure that claw is in closed position
+                    //robot.Outtake.extendIN();
+                    outtakeOption = "lowBasket";
                     //robot.Outtake.closeClaw();
                     state = State.OUTTAKE;
                 }
@@ -647,7 +663,7 @@ public class BLUE_TeleOpV1 extends OpMode {
                     outtakeOption = "wallIntakeFront";
                     state = State.OUTTAKE;
                 }
-                if(gamepad2.dpad_right){
+                if(gamepad2.dpad_right && robot.Outtake.claw.getPosition() > 0.2){
                     outtakeOption = "sampleDeliver";
                     state = State.OUTTAKE;
                 }
@@ -671,13 +687,24 @@ public class BLUE_TeleOpV1 extends OpMode {
                     robot.Outtake.leftSlideSetPositionPower(875,1);
                     robot.Outtake.rightSlideSetPositionPower(875,1);
                     if (robot.Outtake.outtakeLeftSlide.getCurrentPosition()>200){
+                        robot.Outtake.extendIN();
                         robot.Outtake.highBasket();
                     }
                 }
-                if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 795 && gamepad2.left_bumper){ // If at high basket position
+                if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 700 && gamepad2.left_bumper){ // If at high basket position
                     robot.Outtake.openClaw();
                 }
-                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 795 && gamepad2.a && robot.Outtake.claw.getPosition() < 0.05){ // Should robot make sure claw is open before going down
+                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 700 && gamepad2.a && robot.Outtake.claw.getPosition() < 0.05){ // Should robot make sure claw is open before going down
+                    outtakeOption = "start";
+                    state = State.START;
+                }
+                if (outtakeOption.equals("lowBasket")){
+                    robot.Outtake.lowBasket();
+                }
+                if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 200 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 350 && gamepad2.left_bumper){ // If at high basket position
+                    robot.Outtake.openClaw();
+                }
+                else if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 200 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 350 && gamepad2.a && robot.Outtake.claw.getPosition() < 0.05){ // Should robot make sure claw is open before going down
                     outtakeOption = "start";
                     state = State.START;
                 }
@@ -727,7 +754,7 @@ public class BLUE_TeleOpV1 extends OpMode {
                     outtakeOption = "highChamber";
                 }
 
-                if (outtakeOption.equals("highChamber") && robot.Outtake.outtakeLeftSlide.getCurrentPosition()>100){
+                if (outtakeOption.equals("highChamber") && robot.Outtake.outtakeLeftSlide.getCurrentPosition()>5){
                     robot.Outtake.highChamberSetUpwards();
                 }
                 if (robot.Outtake.outtakeLeftSlide.getCurrentPosition() > 450 && robot.Outtake.outtakeLeftSlide.getCurrentPosition() < 525 && (gamepad2.left_bumper)){ // Open claw if specimen scored
@@ -773,20 +800,11 @@ public class BLUE_TeleOpV1 extends OpMode {
         //Hang testing:
         // Move slides up before hanging
         if (gamepad1.y) {
-            robot.Outtake.outtakeArmAxon.setPosition(0.43);
-            robot.Outtake.extendIN();
-            robot.Outtake.openClaw();
-            robot.Outtake.leftSlideSetPositionPower(2600, 1);
-            robot.Outtake.rightSlideSetPositionPower(2600, 1);
+            robot.Hang.hangServo.setPosition(0.09);
         }
         // Pull slides down to hang
         else if(gamepad1.x) {
             robot.Hang.hang();
-//            robot.Outtake.outtakeArmAxon.setPosition(0.43);
-//            robot.Outtake.extendIN();
-//            robot.Outtake.openClaw();
-//            robot.Outtake.leftSlideSetPositionPower(1400, 1);
-//            robot.Outtake.rightSlideSetPositionPower(1400, 1);
         }
 
 
@@ -905,7 +923,7 @@ public class BLUE_TeleOpV1 extends OpMode {
         telemetryA.addData("Runtime (seconds) = ", "%.1f", getRuntime());
         telemetryA.addData("Hang motor position: ", robot.Hang.hangMotor.getCurrentPosition());
         //telemetryA.addData("Robot Driving Orientation = ", drivingOrientation);
-      //  telemetryA.addData("State = ", state);
+        //  telemetryA.addData("State = ", state);
         //telemetryA.addData("Time in State (seconds) = ", 0);
         //telemetryA.addData("lastTime = ", lastTime);
         //telemetryA.addLine(" ");
