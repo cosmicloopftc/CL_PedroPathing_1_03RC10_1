@@ -106,12 +106,12 @@ public class RR_2AutoRedSpecimen_5SpecPush extends LinearOpMode {
         double start_OuttakeArmAxonPos =  0.28;         //position inside robot at start
 
         double scoring_OuttakeArmAxon_ScoringPos = 0.9;       //rotate outtake arm to scoring position
-        int scoring_OutakeSlider_ScoringPos = 475;    // 1330 --> 1320 --> 1300 --> 1290  --->475       //raise outtake  slider to scoring position
+        int scoring_OutakeSlider_ScoringPos = 470;    // 1330 --> 1320 --> 1300 --> 1290  --->475       //raise outtake  slider to scoring position
         double scoring_OuttakeExtension_ScoringPos =  1;   //extend outtake out to scoring position
         double clawOpen_Pos = 0.0;  // change from Eduardo 2/17  0.7;       //open claw after score
         double clawOpen_pauseTimeSecond = 0.15;
 
-        double wallPickup_OuttakeArmAxonPos = 0.28;         //rotate outtake arm into robot to wall pickup position
+        double wallPickup_OuttakeArmAxonPos = 0.29;         //rotate outtake arm into robot to wall pickup position
         int wallPickup_SliderPos = 0;                       //outtake slider position to pickup specimen from wall
         double wallPickup_OuttakeExtensionPos =  0.82;      //extend out arm out (need to place this to the place after preloadscore)
 
@@ -147,23 +147,23 @@ public class RR_2AutoRedSpecimen_5SpecPush extends LinearOpMode {
                 //       .setReversed(true)
 
                 // TODO: from states comp: x = 40, 58, 68
-                .splineToLinearHeading(new Pose2d(43, -24, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
-
+                .splineToLinearHeading(new Pose2d(42, -24, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
+                // 43
                 .splineToLinearHeading(new Pose2d(47, -15, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
-
+                // 47
                 .splineToLinearHeading(new Pose2d(47, -47, Math.toRadians(-90)), Math.toRadians(-90), velFastMin, accMedium)  //velFastMin accFastMax
 
                 .splineToLinearHeading(new Pose2d(50, -24, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
 
-                .splineToLinearHeading(new Pose2d(59, -15, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)   // accFastMin
-
-                .splineToLinearHeading(new Pose2d(59, -47, Math.toRadians(-90)), Math.toRadians(-90), velMedium, accMedium)  //velFastMin accFastMax
+                .splineToLinearHeading(new Pose2d(58, -15, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)   // accFastMin
+                // 59
+                .splineToLinearHeading(new Pose2d(58, -47, Math.toRadians(-90)), Math.toRadians(-90), velMedium, accMedium)  //velFastMin accFastMax
 
             //    .splineToLinearHeading(new Pose2d(56, -24, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
 
-                .splineToLinearHeading(new Pose2d(66, -15, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)  // accFastMin
-
-                .splineToLinearHeading(new Pose2d(66, -47, Math.toRadians(-90)), Math.toRadians(-90), velFastMin, accMedium)   //velFastMin accFastMax
+                .splineToLinearHeading(new Pose2d(67, -15, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)  // accFastMin
+                // 66
+                .splineToLinearHeading(new Pose2d(67, -47, Math.toRadians(-90)), Math.toRadians(-90), velFastMin, accMedium)   //velFastMin accFastMax
 
 //                .setReversed(true)
 //                .strafeTo(new Vector2d(54, -8), velFast, accFast)     //toward Sample5
@@ -246,7 +246,7 @@ public class RR_2AutoRedSpecimen_5SpecPush extends LinearOpMode {
 //                .splineToConstantHeading(new Vector2d(38,-63),Math.toRadians(-90))        //spline to more to near wall
 //                .splineToConstantHeading(new Vector2d(38,-64.5),Math.toRadians(-90));     //spline to more to near wall
                 .strafeTo(new Vector2d(38, -62.5), velFast, accFastMin)
-                .strafeTo(new Vector2d(38, -64.5), velFast, accFastMax);
+                .strafeTo(new Vector2d(38, -64.5), velFast, accFastMax);  // -64.5
                            //             .stopAndAdd(autoClawAction(clawClose_Pos, clawClose_pauseTimeSecond));
 
         // starting pose Y = -63, so need to go back more to wall, so -63.5?  TODO: need to reset Y as "wall squaring method"
