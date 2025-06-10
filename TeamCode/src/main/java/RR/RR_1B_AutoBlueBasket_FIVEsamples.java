@@ -101,7 +101,7 @@ public class RR_1B_AutoBlueBasket_FIVEsamples extends LinearOpMode {
 
 
         double readyPosition = 0.43;
-        double grabPosition = 0.27;
+        double grabPosition = 0.28;
         double intakeAxonPosition = 0.635;
         double sweeperIn = 0.09;
         double sweeperOUT = 0.5;
@@ -122,18 +122,18 @@ public class RR_1B_AutoBlueBasket_FIVEsamples extends LinearOpMode {
 //                                autoouttakeExtensionAction(0.85, 0),
 //                                autoOuttakeSliderHighBasketAction()
                 .setTangent(45)
-                .strafeToSplineHeading(new Vector2d(-55.5, -50.5), Math.toRadians(45), velFast, accFast)  // prev -57.5, -52.5
+                .strafeToSplineHeading(new Vector2d(-56.5, -51.5), Math.toRadians(45), velFast, accFast)  // prev -57.5, -52.5
                 .waitSeconds(0.5);
 
         TrajectoryActionBuilder grabPose = preScore.endTrajectory().fresh()
-                .strafeToSplineHeading(grabPosePosition1, Math.toRadians(86));  // prev 81
+                .strafeToSplineHeading(grabPosePosition1, Math.toRadians(87));  // prev 81
 
         TrajectoryActionBuilder turnToBasket3 = grabPose.endTrajectory().fresh()
                 .waitSeconds(0.75)
                 .strafeToSplineHeading(new Vector2d(-56.5, -51.5), Math.toRadians(45.5), velFast, accFast);
 
         TrajectoryActionBuilder grabPose2 = turnToBasket3.endTrajectory().fresh()
-                .turnTo(Math.toRadians(100));  // prev 109.43
+                .turnTo(Math.toRadians(110));  // prev 109.43
         //           .strafeToSplineHeading(grabPosePosition, Math.toRadians(97));
 
         TrajectoryActionBuilder turnToBasket20 = grabPose2.endTrajectory().fresh()
@@ -141,7 +141,7 @@ public class RR_1B_AutoBlueBasket_FIVEsamples extends LinearOpMode {
                 .turnTo(Math.toRadians(46));
 
         TrajectoryActionBuilder grabPose3 = turnToBasket3.endTrajectory().fresh()
-                .strafeToSplineHeading(grabPosePosition3, Math.toRadians(118.25));
+                .strafeToSplineHeading(grabPosePosition3, Math.toRadians(117));
 //                .strafeToSplineHeading(grabPosePosition, Math.toRadians(124));
 
         TrajectoryActionBuilder move = grabPose3.endTrajectory().fresh()
@@ -150,14 +150,12 @@ public class RR_1B_AutoBlueBasket_FIVEsamples extends LinearOpMode {
 
         TrajectoryActionBuilder turnToBasket10 = move.endTrajectory().fresh()
                 .waitSeconds(0.65)
-                .strafeToSplineHeading(new Vector2d(-56.5, -51.5), Math.toRadians(45));
+                .strafeToSplineHeading(new Vector2d(-56, -52), Math.toRadians(47));
 
         TrajectoryActionBuilder submersible = turnToBasket3.endTrajectory().fresh()
                 .setTangent(45)
-                .splineToLinearHeading(new Pose2d(-22, -8, 0), Math.toRadians(0), velFast, accFastSub);
+                .splineToLinearHeading(new Pose2d(-20, -8, 0), Math.toRadians(0), velFast, accFastSub);
         //          .waitSeconds(1.0);  // TODO
-
-
 
         TrajectoryActionBuilder turnToBasket2 = submersible.endTrajectory().fresh()
                 .setTangent(210)
@@ -287,17 +285,17 @@ public class RR_1B_AutoBlueBasket_FIVEsamples extends LinearOpMode {
                                 //move to first sample
                                 new ParallelAction(
                                         autoOuttakeSliderAction(0, 1),
-                                        autoIntakeSliderAction(600, sliderPower, 0),
+                                        autoIntakeSliderAction(500, sliderPower-0.1, 0),
                                         //move to first sample
                                         grabPose2.build()
                                 ),
-                                autoIntakeSliderAction(750, sliderPower-0.1, 1),
+                                autoIntakeSliderAction(750, sliderPower-0.25, 1),
                                 autoIntakeServoAxonAction(intakeAxonPosition, 0),
                                 /*NEXT STEP*/
                                 autoIntakeSliderAction(1, sliderPower, 0),
 
                                 autoIntakeSpiner(0, 0.15),
-                                autoOuttakeArmAxonAction(grabPosition, 0.2),
+                                autoOuttakeArmAxonAction(grabPosition, 0.3),
                                 autoClawAction(0.3, 0.3),
                                 new ParallelAction(
                                         autoOuttakeSliderHighBasketAction(),
@@ -407,7 +405,7 @@ public class RR_1B_AutoBlueBasket_FIVEsamples extends LinearOpMode {
 
         TrajectoryActionBuilder submersibleTurnSafety = submersibleTurn.endTrajectory().fresh()
 //                .lineToX(-26)
-                .turnTo(Math.toRadians(40))
+                .strafeToSplineHeading(new Vector2d(-23, -8), Math.toRadians(40), velFast, accFast)
                 .waitSeconds(1.5);   // TODO
 
         Actions.runBlocking(
