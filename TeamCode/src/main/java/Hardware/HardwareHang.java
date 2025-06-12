@@ -42,7 +42,7 @@ public class HardwareHang {
 
     }
 
-//example:  for Intake motor
+    //example:  for Intake motor
 //public method (function) for Intake motor power--to be accessible from anywhere
     public void setPowerPosition(int position, double power) {
         hangMotor.setTargetPosition(position);
@@ -50,6 +50,6 @@ public class HardwareHang {
         hangMotor.setPower(power);
     }
     public void hang() {
-        setPowerPosition(3000, 1); //Make sure 0 is when hooks all the way extended back
+        setPowerPosition(2800, 1); //Make sure 0 is when hooks all the way extended back
     }
 }
