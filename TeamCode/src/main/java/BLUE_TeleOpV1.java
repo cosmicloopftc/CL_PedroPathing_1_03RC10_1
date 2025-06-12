@@ -510,6 +510,7 @@ public class BLUE_TeleOpV1 extends OpMode {
                     robot.Intake.intakeUP();
                     robot.Outtake.outtakeArmAxon.setPosition(0.2);
                     robot.Outtake.extendOUT();
+                    robot.Hang.hangServo.setPosition(0.09);//closed position is 1.0
                 }
 //                if(gamepad2.dpad_down){
 //                    outtakeOption = "wallIntakeBack";
@@ -800,7 +801,7 @@ public class BLUE_TeleOpV1 extends OpMode {
         //Hang testing:
         // Move slides up before hanging
         if (gamepad1.y) {
-            robot.Hang.hangServo.setPosition(0.09);
+            robot.Hang.hangServo.setPosition(0.05);
         }
         // Pull slides down to hang
         else if(gamepad1.x) {

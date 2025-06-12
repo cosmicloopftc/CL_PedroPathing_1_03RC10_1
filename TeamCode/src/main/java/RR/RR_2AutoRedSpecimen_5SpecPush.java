@@ -105,13 +105,13 @@ public class RR_2AutoRedSpecimen_5SpecPush extends LinearOpMode {
         double clawClose_pauseTimeSecond = 0.3;         //hold time to allow time for claw to close and specimen to adjust position
         double start_OuttakeArmAxonPos =  0.28;         //position inside robot at start
 
-        double scoring_OuttakeArmAxon_ScoringPos = 0.9;       //rotate outtake arm to scoring position
+        double scoring_OuttakeArmAxon_ScoringPos = 0.91;       //rotate outtake arm to scoring position
         int scoring_OutakeSlider_ScoringPos = 470;    // 1330 --> 1320 --> 1300 --> 1290  --->475       //raise outtake  slider to scoring position
         double scoring_OuttakeExtension_ScoringPos =  1;   //extend outtake out to scoring position
         double clawOpen_Pos = 0.0;  // change from Eduardo 2/17  0.7;       //open claw after score
         double clawOpen_pauseTimeSecond = 0.15;
 
-        double wallPickup_OuttakeArmAxonPos = 0.29;         //rotate outtake arm into robot to wall pickup position
+        double wallPickup_OuttakeArmAxonPos = 0.28;         //rotate outtake arm into robot to wall pickup position
         int wallPickup_SliderPos = 0;                       //outtake slider position to pickup specimen from wall
         double wallPickup_OuttakeExtensionPos =  0.82;      //extend out arm out (need to place this to the place after preloadscore)
 
@@ -153,17 +153,18 @@ public class RR_2AutoRedSpecimen_5SpecPush extends LinearOpMode {
                 // 47
                 .splineToLinearHeading(new Pose2d(47, -47, Math.toRadians(-90)), Math.toRadians(-90), velFastMin, accMedium)  //velFastMin accFastMax
 
-                .splineToLinearHeading(new Pose2d(50, -24, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
-
+                .splineToLinearHeading(new Pose2d(52, -24, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
+                // 50
                 .splineToLinearHeading(new Pose2d(58, -15, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)   // accFastMin
                 // 59
                 .splineToLinearHeading(new Pose2d(58, -47, Math.toRadians(-90)), Math.toRadians(-90), velMedium, accMedium)  //velFastMin accFastMax
 
             //    .splineToLinearHeading(new Pose2d(56, -24, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
-
-                .splineToLinearHeading(new Pose2d(67, -15, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)  // accFastMin
+                .splineToLinearHeading(new Pose2d(59, -20, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)
+                    // 62, -24
+                .splineToLinearHeading(new Pose2d(68, -15, Math.toRadians(-90)), Math.toRadians(-60), velMedium, accMedium)  // accFastMin
                 // 66
-                .splineToLinearHeading(new Pose2d(67, -47, Math.toRadians(-90)), Math.toRadians(-90), velFastMin, accMedium)   //velFastMin accFastMax
+                .splineToLinearHeading(new Pose2d(68, -47, Math.toRadians(-90)), Math.toRadians(-90), velFastMin, accMedium)   //velFastMin accFastMax
 
 //                .setReversed(true)
 //                .strafeTo(new Vector2d(54, -8), velFast, accFast)     //toward Sample5
@@ -350,6 +351,7 @@ public class RR_2AutoRedSpecimen_5SpecPush extends LinearOpMode {
                 .afterTime(0.1, autoouttakeExtensionAction(wallPickup_OuttakeExtensionPos))        //extend out arm out to grab specimen on wall
                 .afterTime(0.1, autoOuttakeSliderAction(wallPickup_SliderPos, 1))           //=0 outtake slider position to pickup specimen from wall
 
+
                 .strafeToLinearHeading(new Vector2d(40, -63.5),
                         Math.toRadians(-90), velStupidFast, accStupidFast);        // 40, -63.5                   //1st move back from submersible pole
             //    .setTangent(-90)
@@ -408,7 +410,7 @@ public class RR_2AutoRedSpecimen_5SpecPush extends LinearOpMode {
         Actions.runBlocking(
                 new SequentialAction(
                         new ParallelAction(
-                                autoOuttakeArmAxonAction(scoring_OuttakeArmAxon_ScoringPos,0),        //rotate outtake arm to scoring position
+                                autoOuttakeArmAxonAction(scoring_OuttakeArmAxon_ScoringPos-0.01,0),        //rotate outtake arm to scoring position
                                 autoOuttakeSliderAction(scoring_OutakeSlider_ScoringPos,1),      //raise outtake  slider to scoring position
                                 preloadScore.build()               //move forward to submersible; //**open claw; //1st move back from submersible
                         ),

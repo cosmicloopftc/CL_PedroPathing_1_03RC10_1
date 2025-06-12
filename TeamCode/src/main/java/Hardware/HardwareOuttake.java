@@ -148,7 +148,7 @@ public class HardwareOuttake {
     public void wallIntakeFront(){
         leftSlideSetPositionPower(0,1);
         rightSlideSetPositionPower(0,1);
-        outtakeArmAxon.setPosition(0.29);
+        outtakeArmAxon.setPosition(0.28);
         extendOUT();
     }
 
