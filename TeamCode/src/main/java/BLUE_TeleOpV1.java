@@ -510,6 +510,7 @@ public class BLUE_TeleOpV1 extends OpMode {
                     robot.Intake.intakeUP();
                     robot.Outtake.outtakeArmAxon.setPosition(0.2);
                     robot.Outtake.extendOUT();
+                    robot.Hang.hangServo.setPosition(0.9);//closed position is 1.0
                 }
 //                if(gamepad2.dpad_down){
 //                    outtakeOption = "wallIntakeBack";
