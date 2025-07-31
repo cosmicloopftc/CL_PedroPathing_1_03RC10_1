@@ -193,6 +193,8 @@ public class MeepMeepTesting_5Spec_Push {
 
 
         // Declare out second bot
+        Pose2d sampleBeginPose = new Pose2d(38, -63, Math.toRadians(-90));     //start at wall starting
+
         RoadRunnerBotEntity mySecondBot = new DefaultBotBuilder(meepMeep)
                 // We set this bot to be blue
                 .setColorScheme(new ColorSchemeBlueDark())
@@ -215,8 +217,8 @@ public class MeepMeepTesting_5Spec_Push {
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 // Add both of our declared bot entities
-                .addEntity(myFirstBot)
-                //.addEntity(mySecondBot)
+                //.addEntity(myFirstBot)
+                .addEntity(mySecondBot)
                 .start();
     }
 }

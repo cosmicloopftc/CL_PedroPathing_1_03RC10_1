@@ -157,15 +157,22 @@ public class MeepMeepTesting_2bots_OT {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 14)
                 .build();
 
-        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(30, 30, Math.toRadians(180)))
-                .lineToX(0)
-                .turn(Math.toRadians(90))
-                .lineToY(0)
-                .turn(Math.toRadians(90))
-                .lineToX(30)
-                .turn(Math.toRadians(90))
-                .lineToY(30)
-                .turn(Math.toRadians(90))
+        Pose2d sample2ndBeginPose = new Pose2d(38, -63, Math.toRadians(-90));     //start at wall starting
+
+        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(sample2ndBeginPose)
+                .setReversed(true)
+                .setTangent(45)
+                .strafeToSplineHeading(new Vector2d(15, -54.5), Math.toRadians(0))
+                .strafeToSplineHeading(new Vector2d(-61.5, -54.5), Math.toRadians(0))
+
+                //.splineToConstantHeading(new Vector2d(-0, -52.5), Math.toRadians(180))
+                //.splineToLinearHeading(new Pose2d(-10, -55, Math.toRadians(0)), Math.toRadians(180))
+                //.splineToLinearHeading(new Pose2d(20, -52.5, Math.toRadians(-45)), Math.toRadians(180))
+                //.setTangent(135)
+                //.strafeToConstantHeading(new Vector2d(33, -58))
+
+
+                //.splineToLinearHeading(new Pose2d(-57.5, -52.5, Math.toRadians(45)), Math.toRadians(180))
                 .build());
 
 
@@ -173,8 +180,8 @@ public class MeepMeepTesting_2bots_OT {
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 // Add both of our declared bot entities
-                .addEntity(myFirstBot)
-                //.addEntity(mySecondBot)
+                //.addEntity(myFirstBot)
+                .addEntity(mySecondBot)
                 .start();
     }
 }
